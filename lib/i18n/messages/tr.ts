@@ -14,6 +14,11 @@ export const trMessages = {
     tr: "Türkçe",
     en: "English",
   },
+  theme: {
+    dark: "Koyu",
+    light: "Parlak",
+    switch: "Tema",
+  },
   booking: {
     lifecycle: {
       pending: "Beklemede",
@@ -42,6 +47,9 @@ export const trMessages = {
   dashboard: {
     shell: {
       today: "Bugün",
+      clockTzShort: "İstanbul",
+      clockTzTitle: "Saat dilimi: Avrupa/İstanbul (gerçek zamanlı)",
+      clockLoading: "Saat yükleniyor",
       welcome: "Hoş geldin, {name}",
       calmBanner: "Sakin bir ekran—acil bir şey yok.",
       helloName: "Merhaba, {name}",
@@ -54,6 +62,7 @@ export const trMessages = {
       matching: "Eşleştirme",
       sessions: "Seanslar",
       journey: "Yolculuk",
+      trust: "Güven",
     },
     sessionsSection: {
       kicker: "Yaklaşan",
@@ -82,14 +91,17 @@ export const trMessages = {
     sections: {
       journeyKicker: "Devam",
       journeyTitle: "Yolculuğunu seç",
-      journeySubtitle: "Kısa köprüler—her biri farklı bir ritim için.",
-      journeyCardRefineTitle: "Eşleştirmeyi rafine et",
-      journeyCardRefineBody: "Tercihlerini güncelleyerek önerileri taze tut.",
-      journeyCardNightTitle: "Gece modu planı",
-      journeyCardNightBody: "Akşam düşünceleri için hafif bir çerçeve notu—yakında günlük.",
-      journeyCardNotesTitle: "Seans öncesi not",
+      journeySubtitle:
+        "Her kart nazik bir davet—zorunlu değil. İhtiyaç duyduğunda, kendi ritminde aç.",
+      journeyCardRefineTitle: "Eşleştirmeyi güncelle",
+      journeyCardRefineBody:
+        "Odak alanını, dili ve müsait olduğun dilimleri yeniden işaretle; öneriler seninle birlikte yenilenir.",
+      journeyCardNightTitle: "Akşam çerçevesi",
+      journeyCardNightBody:
+        "Günü kapatırken zihni yumuşatmak için kısa bir yol: tek soru, bir cümle, yargı yok. Günlük modülü çok yakında.",
+      journeyCardNotesTitle: "Seans öncesi not defteri",
       journeyCardNotesBody:
-        "Her randevu için ayrı not defteri; sayfa sayfa kaydedilir, terapistin görüşmeden önce okuyabilir.",
+        "Her randevuya özel sayfalar; düşüncelerini kaydeder, terapistin görüşmeden önce sessizce okur—sürpriz değil, hazırlık.",
       therapistsKicker: "Önerilen",
       therapistsTitle: "Sana yakın terapistler",
       therapistsBody: "Tercihlerine göre sıralandı. Platformda {total} doğrulanmış profil listeleniyor.",
@@ -103,12 +115,30 @@ export const trMessages = {
         "Henüz kayıtlı bir aktivite yok. Eşleştirme adımlarını tamamladığında buraya düşecek.",
       privacyTitle: "Gizlilik ve güven",
       privacyBody:
-        "Oturumlar uçtan uca şifreleme ile taşınır; terapist profilleri doğrulama akışından geçer. Bu panel yalnızca size ait verileri gösterir—paylaşımlarınız başka üyelerle görünmez.",
-      privacyFootnote:
-        "Detaylı politika ve KVKK metinleri ürün yayına yaklaştıkça eklenecek.",
+        "Bağlantılar şifrelenir; erişim rollerinize göre sınırlanır. Bu özet; veri güvenliği ve KVKK haklarınız için Güven Merkezi’ne bağlanır.",
+      privacyFootnote: "Detaylı metinler ve acil durum bilgisi Güven Merkezi’nde.",
+      privacyReadMore: "Güven Merkezi’ni aç",
       moodKicker: "Ruh hali",
-      moodTitle: "Bugünkü snapshot",
-      moodSubtitle: "Yumuşak, kişisel—tıbbi içerik içermez.",
+      moodTitle: "Günün iç ritmi",
+      moodSubtitle: "Yansıma amaçlıdır; tanı veya tıbbi tavsiye içermez.",
+      moodMetricBalanceTitle: "Denge hissi",
+      moodMetricBalanceHint:
+        "Tempo ve iç düzenin bugüne göre yumuşak bir özeti—ölçüm değil, bir ayna.",
+      moodMetricEnergyTitle: "Enerji tonu",
+      moodMetricEnergyHint:
+        "Beden ve dikkatin taşınış biçimi; oyunlaştırılmış, hafif bir öz-değerlendirme.",
+      moodMetricConnectionTitle: "Bağ kurma alanı",
+      moodMetricConnectionHint:
+        "Yakınlık ve güven temasına dair içsel bir çerçeve; ilişki haritanla birlikte düşün.",
+      breathKicker: "Mikro mola",
+      breathTitle: "Kutu nefes",
+      breathBody:
+        "Daire büyürken burnundan yavaşça al, kenarda tut, küçülürken ağızdan uzat. Dört saniyelik sakin döngü.",
+      breathPhaseInhale: "Nefes al",
+      breathPhaseHoldIn: "Hafifçe tut",
+      breathPhaseExhale: "Yavaşça ver",
+      breathPhaseHoldOut: "Boşlukta bekle",
+      breathRhythmHint: "4 sn · 4 sn · 4 sn · 4 sn",
       wellnessKicker: "İçgörü",
       wellnessTitle: "Duygusal iklime dair",
       welcomeKicker: "Kişisel alan",
@@ -161,6 +191,47 @@ export const trMessages = {
       cancelling: "İptal ediliyor…",
       notes: "Notlar",
       cancelOk: "Seans iptal edildi. İstersen yeni bir zaman seçebilirsin.",
+    },
+    video: {
+      join: "Seansa katıl",
+      joinSoon: "30 dk kala açılır",
+      endedShort: "Seans bitti",
+      leave: "Görüşmeden ayrıl",
+      connecting: "Görüşmeye bağlanıyor…",
+      roomTitle: "Görüntülü görüşme",
+      backSessions: "Seanslara dön",
+      configTitle: "Video altyapısı hazır değil",
+      configBody:
+        ".env.local dosyasına NEXT_PUBLIC_LIVEKIT_URL (örn. wss://proje.livekit.cloud), LIVEKIT_API_KEY ve LIVEKIT_API_SECRET ekleyin. Anahtarları LiveKit Cloud konsolundan oluşturabilirsiniz.",
+      errGeneric: "Görüşme odası açılamadı.",
+      errLivekit: "LiveKit yapılandırması eksik veya sunucu reddetti. Ortam değişkenlerini kontrol edin.",
+      errUnauthorized: "Oturum gerekli.",
+      errNotFound: "Seans bulunamadı.",
+      errForbidden: "Bu seansa erişiminiz yok.",
+      errCancelled: "Seans iptal edilmiş.",
+      errNotJoinable: "Bu seans için görüşme başlatılamaz.",
+      errEnded: "Seans süresi dolmuş.",
+      errTooEarly: "Görüşmeye yalnızca seans saatinden en fazla 30 dakika önce katılabilirsiniz.",
+      remainingLabel: "Kapanmaya kalan",
+      wrapupWarning:
+        "Planlanan görüşme süresinin bitmesine 5 dakikadan az kaldı. Süre dolunca oda otomatik kapanacak.",
+      extendTitle: "Süreyi uzat",
+      extendHint: "1–120 dakika arası ek süre tanımlayabilirsiniz; danışanın oturumu da aynı süre boyunca açık kalır.",
+      extendMinutesLabel: "Dakika",
+      extendSubmit: "Uzat",
+      extending: "Uzatılıyor…",
+      extendErrInvalidMinutes: "Geçerli bir dakika girin (1–120).",
+      extendErrForbidden: "Bu seans için süre uzatma yetkiniz yok.",
+      extendErrBadStatus: "Bu seansın durumu uzatmaya uygun değil.",
+      extendErrNotFound: "Seans bulunamadı.",
+      extendErrRpc: "Süre uzatılamadı. Tekrar deneyin.",
+      extendAdded:
+        "+{minutes} dakika eklendi. Güncel kapanma süresi üst çubuktaki geri sayımda görünür.",
+      userJoinedChat: "{name} odaya katıldı.",
+      participantFallbackName: "Katılımcı",
+      roomParticipantsOne: "Odada 1 katılımcı",
+      roomParticipantsMany: "Odada {count} katılımcı",
+      roomCountTitle: "Şu an görüşme odasında bağlı kişiler",
     },
     notebook: {
       title: "Seans not defteri",
@@ -363,7 +434,18 @@ export const trMessages = {
       registerIntro: "Kısa bir kayıt akışıyla ilerleyin; kimliğiniz şifrelenmiş kanallar üzerinden korunur.",
       terms: "Kullanım Koşulları",
       privacy: "Gizlilik Bildirimi",
+      termsHref: "/guven#kosullar",
+      privacyHref: "/guven#kvkk",
+      footerPrefixTr: "Devam ederek ",
+      footerMiddleTr: " ve ",
+      footerSuffixTr: " metinlerini okuduğunuzu ve kabul ettiğinizi onaylarsınız.",
+      footerPrefixEn: "By continuing you agree to the ",
+      footerMiddleEn: " and the ",
+      footerSuffixEn: ".",
     },
+    brandDisclaimer:
+      "Bu arayüz ürün deneyimidir; klinik veya yasal taahhüt oluşturmaz. Tedavi süreci uzman değerlendirmesi ile yürütülür. Ayrıntılar:",
+    trustCenterLink: "Güven Merkezi",
     mode: {
       login: "Giriş yap",
       register: "Kayıt ol",
@@ -478,6 +560,76 @@ export const trMessages = {
       s3: "Zamanınıza uyum sağlayalım",
       s4: "Size yakın eşleşmeler",
     },
+  },
+  trust: {
+    metaTitle: "Güven ve gizlilik",
+    metaDescription:
+      "Veri güvenliği, KVKK hakları, terapist doğrulama ve acil durum bilgisi. Terapi platformu için güven özeti.",
+    kicker: "Şeffaflık",
+    pageTitle: "Güven Merkezi",
+    pageIntro:
+      "Terapi, güven ilişkisine dayanır. Bu sayfa; verilerin nasıl korunduğunu, KVKK kapsamındaki haklarınızı ve platformun sınırlarını açıkça özetler. Kesin hukuki metinler yayınlandığında burayı güncelleyeceğiz.",
+    lastUpdated: "Son güncelleme: Mayıs 2026 · bilgilendirme metnidir, hukuki danışmanlık değildir.",
+    backLogin: "Giriş",
+    backHome: "Başlangıç",
+    tocTitle: "İçindekiler",
+    tocData: "Veriler ve amaç",
+    tocKvkk: "KVKK ve haklarınız",
+    tocTechnical: "Teknik güvenlik",
+    tocTherapists: "Terapist doğrulama",
+    tocCrisis: "Acil durum",
+    tocTerms: "Hizmet ve kullanım",
+    tocContact: "Başvuru",
+    sectionDataTitle: "Hangi veriler işlenir, neden?",
+    sectionDataP1:
+      "Hesap ve iletişim bilgileri, onboarding yanıtlarınız, randevu kayıtları, seans not defterinde sizin oluşturduğunuz içerik ve terapist profil verileri; hizmetin sunulması, randevulaşma ve hesap yönetimi için işlenir.",
+    sectionDataP2:
+      "Verileriniz üçüncü taraflara satılmaz ve reklam profili oluşturmak için kullanılmaz. Veri minimizasyonu ilkesiyle yalnızca gerekli ölçüde tutulur.",
+    sectionDataP3:
+      "Diğer danışanların içeriği size görünmez; veritabanı düzeyinde satır bazlı güvenlik (RLS) ile erişim rollerinize göre ayrıştırılır.",
+    sectionKvkkTitle: "KVKK ve haklarınız",
+    sectionKvkkP1:
+      "6698 sayılı KVKK kapsamında, veri sorumlusu sıfatıyla işleme faaliyetleri hakkında şeffaf bilgi sunulması gerekir. Bu bölüm özet niteliğindedir.",
+    sectionKvkkP2:
+      "İşlemenin hukuki sebebi; sözleşmenin ifası, meşru menfaat veya — ayrıca sunulmuşsa — açık rızanıza dayanabilir.",
+    sectionKvkkRightsTitle: "Başlıca haklarınız (özet)",
+    sectionKvkkR1: "Kişisel verilerinizin işlenip işlenmediğini öğrenme",
+    sectionKvkkR2: "İşlenmişse buna ilişkin bilgi talep etme",
+    sectionKvkkR3: "İşlenme amacını ve bunların amacına uygun kullanılıp kullanılmadığını öğrenme",
+    sectionKvkkR4: "Yurt içinde veya yurt dışında aktarıldığı üçüncü kişileri bilme",
+    sectionKvkkR5:
+      "Eksik veya yanlış işlenmişse düzeltilmesini isteme ve şartlar dahilinde silinmesini veya yok edilmesini isteme",
+    sectionTechnicalTitle: "Teknik ve organizasyonel önlemler",
+    sectionTechnicalP1:
+      "Tarayıcı ile sunucu arasındaki iletişim TLS (HTTPS) ile şifrelenir. Kimlik doğrulama, güvenli oturum yönetimi ile desteklenir.",
+    sectionTechnicalP2:
+      "Supabase PostgreSQL üzerinde rol tabanlı ve satır düzeyinde politikalar; kullanıcıların yalnızca yetkili oldukları satırları görmesini hedefler.",
+    sectionTherapistsTitle: "Terapist profilleri",
+    sectionTherapistsP1:
+      "Listelenen terapist profilleri yönetici doğrulama akışından geçer; mesleki bilgiler kontrol edilmeden herkese açık listelenmez.",
+    sectionTherapistsP2:
+      "Terapötik süreç ve etik sorumluluk terapiste ve mesleki düzenlemelere aittir; platform iki taraf arasında güvenli randevu ve iletişim altyapısı sağlar.",
+    sectionCrisisTitle: "Acil durum ve platform sınırı",
+    sectionCrisisAlert:
+      "Bu platform acil kriz müdahalesi, sürekli izleme veya acil tıbbi/psikiyatrik hizmet sunmaz.",
+    sectionCrisisP1:
+      "Hayati tehlike, şiddet riski veya acil tıbbi destek gerektiğinde 112 Acil Çağrı veya size en yakın acil servise başvurun.",
+    sectionCrisisP2:
+      "Kendinize veya başkasına zarar verme düşünceleri yaşıyorsanız yalnız kalmayın; güvendiğiniz bir kişiye ulaşın ve bulunduğunuz ülkede geçerli kriz hatlarını kullanın.",
+    sectionTermsTitle: "Hizmet kapsamı ve kullanım",
+    sectionTermsP1:
+      "Arayüzdeki metinler ve araçlar tıbbi teşhis veya tedavi önerisi değildir. Tanı ve tedavi planı, terapistinizle yürütülen profesyonel ilişki içinde şekillenir.",
+    sectionTermsP2:
+      "Ürün beta aşamasında olabilir; özellikler ve metinler güncellenebilir. Önemli değişiklikler için makul bildirim hedeflenir.",
+    sectionTermsP3:
+      "Hesap güvenliği için güçlü benzersiz şifre kullanın; paylaşılan veya halka açık cihazlarda oturumu açık bırakmayın.",
+    sectionContactTitle: "Başvuru ve iletişim",
+    sectionContactP1:
+      "KVKK kapsamındaki talepleriniz ve gizlilik sorularınız için iletişim adresi ürün yayınına yaklaştıkça bu sayfada yayımlanacaktır.",
+    sectionContactP2:
+      "Yayın sırasında kullanacağınız resmi destek e-postanızı (ör. destek@alanadiniz.com) site ayarlarına ve bu sayfaya ekleyin.",
+    footerLegal:
+      "Bu metin bilgilendirme amaçlıdır; hukuki bağlayıcılık için avukat ve gerekiyorsa KVKK uzmanı incelemesi yapılmalıdır.",
   },
   sessionBooking: {
     closeAria: "Kapat",

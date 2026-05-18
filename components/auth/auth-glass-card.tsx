@@ -3,6 +3,7 @@
 import type { CSSProperties, MouseEvent } from "react";
 import { useCallback, useRef } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import Link from "next/link";
 
 import { useI18n } from "@/components/i18n/i18n-provider";
 import { siteConfig } from "@/config/site";
@@ -115,31 +116,15 @@ export function AuthGlassCard({
           </div>
 
           <p className="pt-8 text-[0.72rem] leading-relaxed text-muted-foreground/75">
-            {locale === "tr" ? (
-              <>
-                Devam ederek{" "}
-                <a className="underline-offset-4 hover:text-foreground hover:underline" href="#">
-                  {t("auth.glass.terms")}
-                </a>
-                &apos;nı ve{" "}
-                <a className="underline-offset-4 hover:text-foreground hover:underline" href="#">
-                  {t("auth.glass.privacy")}
-                </a>
-                &apos;ni kabul etmiş olursunuz.
-              </>
-            ) : (
-              <>
-                By continuing you agree to the{" "}
-                <a className="underline-offset-4 hover:text-foreground hover:underline" href="#">
-                  {t("auth.glass.terms")}
-                </a>{" "}
-                and the{" "}
-                <a className="underline-offset-4 hover:text-foreground hover:underline" href="#">
-                  {t("auth.glass.privacy")}
-                </a>
-                .
-              </>
-            )}
+            {locale === "tr" ? t("auth.glass.footerPrefixTr") : t("auth.glass.footerPrefixEn")}
+            <Link href={t("auth.glass.termsHref")} className="underline-offset-4 hover:text-foreground hover:underline">
+              {t("auth.glass.terms")}
+            </Link>
+            {locale === "tr" ? t("auth.glass.footerMiddleTr") : t("auth.glass.footerMiddleEn")}
+            <Link href={t("auth.glass.privacyHref")} className="underline-offset-4 hover:text-foreground hover:underline">
+              {t("auth.glass.privacy")}
+            </Link>
+            {locale === "tr" ? t("auth.glass.footerSuffixTr") : t("auth.glass.footerSuffixEn")}
           </p>
         </div>
       </motion.div>

@@ -1,8 +1,10 @@
 "use client";
 
+import Link from "next/link";
 import { motion } from "framer-motion";
-import { ShieldCheck, Sparkles, Video } from "lucide-react";
+import { ShieldCheck, Sparkles } from "lucide-react";
 
+import { useI18n } from "@/components/i18n/i18n-provider";
 import { siteConfig } from "@/config/site";
 import { containerRise, fadeUp, premiumEase } from "@/lib/animations";
 
@@ -10,12 +12,13 @@ import { AmbientBackdrop } from "./ambient-backdrop";
 import { SoftParticles } from "./soft-particles";
 
 const iconFor = (label: string) => {
-  if (label.includes("şifre")) return ShieldCheck;
-  if (label.includes("Lisans")) return Sparkles;
-  return Video;
+  if (/şifreli|tls|bağlantı/i.test(label)) return ShieldCheck;
+  if (/doğrulanmış|terapist/i.test(label)) return Sparkles;
+  return ShieldCheck;
 };
 
 export function AuthBrandPanel() {
+  const { t } = useI18n();
   return (
     <div className="relative isolate flex min-h-[320px] flex-col justify-between overflow-hidden px-8 py-12 sm:px-10 lg:min-h-0 lg:px-14 lg:py-16">
       <AmbientBackdrop />
@@ -87,8 +90,10 @@ export function AuthBrandPanel() {
         transition={{ delay: 0.8, duration: 0.55, ease: premiumEase }}
         className="relative z-10 mt-14 max-w-md text-[0.72rem] leading-relaxed text-muted-foreground/75"
       >
-        Bu arayüz yalnızca deneyim tasarımıdır; klinik veya yasal taahhüt oluşturmaz. Gerçek tedavi süreçleri uzman
-        değerlendirmesi ve onayı ile yürütülür.
+        {t("auth.brandDisclaimer")}{" "}
+        <Link href="/guven" className="text-foreground/90 underline-offset-4 hover:underline">
+          {t("auth.trustCenterLink")}
+        </Link>
       </motion.p>
     </div>
   );

@@ -7,10 +7,12 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Menu, X } from "lucide-react";
 
 import { LanguageSwitcher } from "@/components/i18n/language-switcher";
+import { ThemeToggle } from "@/components/theme/theme-toggle";
 import { useI18n } from "@/components/i18n/i18n-provider";
 import { siteConfig } from "@/config/site";
 import { premiumEase } from "@/lib/animations/easing";
 
+import { DashboardLiveClock } from "./dashboard-live-clock";
 import { DashboardSidebarNav } from "./dashboard-sidebar-nav";
 import { SignOutButton } from "./sign-out-button";
 
@@ -110,14 +112,17 @@ export function DashboardShell({
               >
                 <Menu className="size-5" />
               </button>
-              <div>
-                <p className="text-[0.72rem] tracking-[0.12em] text-muted-foreground uppercase">{t("dashboard.shell.today")}</p>
-                <p className="font-display text-[1.05rem] leading-snug tracking-[-0.02em] sm:text-[1.125rem]">
-                  {t("dashboard.shell.welcome", { name: firstName })}
-                </p>
+              <div className="min-w-0 flex-1">
+                <div className="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:gap-4">
+                  <DashboardLiveClock className="sm:max-w-[min(22rem,46vw)]" />
+                  <p className="font-display text-[1.05rem] leading-snug tracking-[-0.02em] sm:text-[1.125rem]">
+                    {t("dashboard.shell.welcome", { name: firstName })}
+                  </p>
+                </div>
               </div>
             </div>
             <div className="flex items-center gap-2 sm:gap-3">
+              <ThemeToggle />
               <LanguageSwitcher />
               <div className="hidden sm:block">
                 <div className="rounded-lg border border-border/50 bg-white/[0.03] px-3 py-2 text-[0.78rem] text-muted-foreground/80">

@@ -227,6 +227,7 @@ export type Database = {
           status: string;
           payment_status: string;
           notes: string | null;
+          video_call_extended_until: string | null;
           created_at: string;
           updated_at: string;
         };
@@ -240,6 +241,7 @@ export type Database = {
           status?: string;
           payment_status?: string;
           notes?: string | null;
+          video_call_extended_until?: string | null;
           created_at?: string;
           updated_at?: string;
         };
@@ -253,6 +255,7 @@ export type Database = {
           status?: string;
           payment_status?: string;
           notes?: string | null;
+          video_call_extended_until?: string | null;
           created_at?: string;
           updated_at?: string;
         };
@@ -344,6 +347,10 @@ export type Database = {
       resolve_session_reschedule_request: {
         Args: { p_request_id: string; p_accept: boolean };
         Returns: Json;
+      };
+      extend_booked_session_video: {
+        Args: { p_session_id: string; p_minutes: number };
+        Returns: string;
       };
     };
     Enums: Record<string, never>;

@@ -5,6 +5,26 @@ const istanbul: Intl.DateTimeFormatOptions = {
   timeZone: "Europe/Istanbul",
 };
 
+/** Panel başlığı: anlık İstanbul tarih + saat (çevrimiçi saat gösterimi). */
+export function formatIstanbulLiveParts(d: Date, locale: AppLocale = "tr"): { dateLine: string; timeLine: string } {
+  const intl = intlLocaleForApp(locale);
+  const dateLine = new Intl.DateTimeFormat(intl, {
+    timeZone: "Europe/Istanbul",
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  }).format(d);
+  const timeLine = new Intl.DateTimeFormat(intl, {
+    timeZone: "Europe/Istanbul",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: false,
+  }).format(d);
+  return { dateLine, timeLine };
+}
+
 export function formatIstanbulDate(iso: string, locale: AppLocale = "tr"): string {
   return new Intl.DateTimeFormat(intlLocaleForApp(locale), {
     ...istanbul,

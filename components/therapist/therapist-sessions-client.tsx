@@ -4,6 +4,7 @@ import Link from "next/link";
 
 import { useI18n } from "@/components/i18n/i18n-provider";
 import { SessionReschedulePanel } from "@/components/sessions/session-reschedule-panel";
+import { SessionJoinVideoControl } from "@/components/video/session-join-video-control";
 import { Button } from "@/components/ui/button";
 import { formatIstanbulSessionWindow } from "@/lib/i18n/datetime";
 import type { RescheduleRequestRow } from "@/lib/supabase/reschedule-repository";
@@ -135,9 +136,19 @@ export function TherapistSessionsClient({
                         {paymentLabel(b.payment_status)}
                       </span>
                     </div>
-                    <Button asChild variant="outline" size="sm" className="w-fit rounded-xl">
-                      <Link href={`/therapist/sessions/${b.id}/prep`}>{t("therapist.sessions.prepLink")}</Link>
-                    </Button>
+                    <div className="flex flex-wrap gap-2">
+                      <SessionJoinVideoControl
+                        sessionId={b.id}
+                        startsAt={b.starts_at}
+                        endsAt={b.ends_at}
+                        status={b.status}
+                        videoExtendedUntil={b.video_call_extended_until}
+                        callHref={`/therapist/sessions/${b.id}/call`}
+                      />
+                      <Button asChild variant="outline" size="sm" className="w-fit rounded-xl">
+                        <Link href={`/therapist/sessions/${b.id}/prep`}>{t("therapist.sessions.prepLink")}</Link>
+                      </Button>
+                    </div>
                   </div>
                   <p className="shrink-0 text-[0.88rem] text-muted-foreground sm:max-w-[220px] sm:text-right">
                     {formatIstanbulSessionWindow(b.starts_at, b.ends_at, locale)}

@@ -39,6 +39,7 @@ function pathAllowedForBannedUser(pathname: string): boolean {
   return (
     pathname === "/hesap-engellendi" ||
     pathname === "/login" ||
+    pathname === "/guven" ||
     pathname.startsWith("/auth/")
   );
 }

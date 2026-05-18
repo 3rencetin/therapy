@@ -15,7 +15,14 @@ export type TherapistPrepPage = {
 
 export type TherapistBookingRow = Pick<
   BookedSessionRow,
-  "id" | "user_id" | "starts_at" | "ends_at" | "status" | "payment_status" | "notes"
+  | "id"
+  | "user_id"
+  | "starts_at"
+  | "ends_at"
+  | "status"
+  | "payment_status"
+  | "notes"
+  | "video_call_extended_until"
 > & {
   client: TherapistBookingClient | null;
   prep_pages: TherapistPrepPage[];
@@ -23,7 +30,14 @@ export type TherapistBookingRow = Pick<
 
 type BookedSessionWithClientJoin = Pick<
   BookedSessionRow,
-  "id" | "user_id" | "starts_at" | "ends_at" | "status" | "payment_status" | "notes"
+  | "id"
+  | "user_id"
+  | "starts_at"
+  | "ends_at"
+  | "status"
+  | "payment_status"
+  | "notes"
+  | "video_call_extended_until"
 > & {
   client: TherapistBookingClient | TherapistBookingClient[] | null;
   prep_pages: TherapistPrepPage[] | null;
@@ -81,6 +95,7 @@ export async function fetchBookingsForTherapistProfile(
       status,
       payment_status,
       notes,
+      video_call_extended_until,
       client:profiles!booked_sessions_user_id_profiles_fkey(full_name, email),
       prep_pages:booked_session_notebook_pages(sort_order,title,body,updated_at)
     `,
@@ -98,6 +113,7 @@ export async function fetchBookingsForTherapistProfile(
     status: r.status,
     payment_status: r.payment_status,
     notes: r.notes,
+    video_call_extended_until: r.video_call_extended_until,
     client: normalizeEmbeddedClient(r.client),
     prep_pages: normalizePrepPages(r.prep_pages),
   }));

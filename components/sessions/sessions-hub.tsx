@@ -15,6 +15,8 @@ import { fadeUp, onboardingListContainer, onboardingListItem } from "@/lib/anima
 import { formatIstanbulSessionWindow } from "@/lib/i18n/datetime";
 import { cn } from "@/lib/utils";
 
+import { SessionJoinVideoControl } from "@/components/video/session-join-video-control";
+
 import { SessionReschedulePanel } from "./session-reschedule-panel";
 
 function isUpcomingActive(row: BookedSessionListRow): boolean {
@@ -165,6 +167,15 @@ export function SessionsHub({
                     />
                   </div>
                   <div className="flex flex-col gap-2 sm:items-end">
+                    <SessionJoinVideoControl
+                      sessionId={row.id}
+                      startsAt={row.starts_at}
+                      endsAt={row.ends_at}
+                      status={row.status}
+                      videoExtendedUntil={row.video_call_extended_until}
+                      callHref={`/dashboard/sessions/${row.id}/call`}
+                      className="w-full sm:w-auto"
+                    />
                     <Button asChild variant="outline" size="sm" className="rounded-xl">
                       <Link href={`/dashboard/sessions/${row.id}/notebook`}>
                         <BookMarked className="mr-1.5 size-4" />

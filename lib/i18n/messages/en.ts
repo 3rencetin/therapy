@@ -16,6 +16,11 @@ export const enMessages: AppMessages = {
     tr: "Türkçe",
     en: "English",
   },
+  theme: {
+    dark: "Dark",
+    light: "Light",
+    switch: "Theme",
+  },
   booking: {
     lifecycle: {
       pending: "Pending",
@@ -44,6 +49,9 @@ export const enMessages: AppMessages = {
   dashboard: {
     shell: {
       today: "Today",
+      clockTzShort: "Istanbul",
+      clockTzTitle: "Time zone: Europe/Istanbul (live)",
+      clockLoading: "Loading clock",
       welcome: "Welcome, {name}",
       calmBanner: "A calm screen—nothing urgent here.",
       helloName: "Hello, {name}",
@@ -56,6 +64,7 @@ export const enMessages: AppMessages = {
       matching: "Matching",
       sessions: "Sessions",
       journey: "Journey",
+      trust: "Trust",
     },
     sessionsSection: {
       kicker: "Upcoming",
@@ -83,14 +92,17 @@ export const enMessages: AppMessages = {
     sections: {
       journeyKicker: "Continue",
       journeyTitle: "Choose your path",
-      journeySubtitle: "Short bridges—each with a different rhythm.",
-      journeyCardRefineTitle: "Refine matching",
-      journeyCardRefineBody: "Refresh recommendations by updating your preferences.",
-      journeyCardNightTitle: "Night mode plan",
-      journeyCardNightBody: "A light framing note for evening thoughts—a journal is coming soon.",
-      journeyCardNotesTitle: "Pre-session notes",
+      journeySubtitle:
+        "Each card is a gentle invitation—never an obligation. Open them when the timing feels right.",
+      journeyCardRefineTitle: "Refresh matching",
+      journeyCardRefineBody:
+        "Update your focus areas, language, and typical windows—recommendations stay aligned with you.",
+      journeyCardNightTitle: "Evening frame",
+      journeyCardNightBody:
+        "A short way to land the day: one question, one sentence, no scorekeeping. A fuller journal is almost here.",
+      journeyCardNotesTitle: "Pre-session notebook",
       journeyCardNotesBody:
-        "A dedicated notebook per appointment; saved page by page so your therapist can read ahead.",
+        "Dedicated pages per appointment; your therapist can read ahead calmly—prep, not surprise.",
       therapistsKicker: "Recommended",
       therapistsTitle: "Therapists close to you",
       therapistsBody: "Ranked by your preferences. {total} verified profiles are listed on the platform.",
@@ -102,11 +114,30 @@ export const enMessages: AppMessages = {
       activityEmpty: "No activity yet. It will appear here once you complete matching.",
       privacyTitle: "Privacy and security",
       privacyBody:
-        "Sessions are protected in transit; therapist profiles go through verification. This panel shows only your data—nothing you share is visible to other members.",
-      privacyFootnote: "Detailed policy and privacy texts will be added as the product nears launch.",
+        "Connections are encrypted and access is limited by your role. This summary links to our Trust Center for data protection and your rights.",
+      privacyFootnote: "Full detail, policies, and crisis information are in the Trust Center.",
+      privacyReadMore: "Open Trust Center",
       moodKicker: "Mood",
-      moodTitle: "Today’s snapshot",
-      moodSubtitle: "Gentle and personal—does not contain medical advice.",
+      moodTitle: "Today’s inner tempo",
+      moodSubtitle: "For reflection only—never a diagnosis or medical guidance.",
+      moodMetricBalanceTitle: "Sense of steadiness",
+      moodMetricBalanceHint:
+        "A soft read on pace and inner order today—not a clinical measure, just a mirror.",
+      moodMetricEnergyTitle: "Energy tone",
+      moodMetricEnergyHint:
+        "How your attention and body feel like they’re carrying the day—a light, playful check-in.",
+      moodMetricConnectionTitle: "Connection space",
+      moodMetricConnectionHint:
+        "A gentle frame for closeness and trust—think alongside the relationship map you’re building.",
+      breathKicker: "Micro break",
+      breathTitle: "Box breathing",
+      breathBody:
+        "Inhale slowly through the nose as the ring grows, hold at the top, exhale as it eases—four calm seconds each phase.",
+      breathPhaseInhale: "Breathe in",
+      breathPhaseHoldIn: "Hold gently",
+      breathPhaseExhale: "Breathe out",
+      breathPhaseHoldOut: "Rest empty",
+      breathRhythmHint: "4s · 4s · 4s · 4s",
       wellnessKicker: "Insight",
       wellnessTitle: "About your emotional climate",
       welcomeKicker: "Your space",
@@ -158,6 +189,46 @@ export const enMessages: AppMessages = {
       cancelling: "Cancelling…",
       notes: "Notes",
       cancelOk: "Session cancelled. You can pick a new time whenever you’re ready.",
+    },
+    video: {
+      join: "Join session",
+      joinSoon: "Opens 30 min before start",
+      endedShort: "Session ended",
+      leave: "Leave call",
+      connecting: "Connecting…",
+      roomTitle: "Video session",
+      backSessions: "Back to sessions",
+      configTitle: "Video not configured",
+      configBody:
+        "Add NEXT_PUBLIC_LIVEKIT_URL (e.g. wss://project.livekit.cloud), LIVEKIT_API_KEY, and LIVEKIT_API_SECRET to .env.local. Create keys in the LiveKit Cloud console.",
+      errGeneric: "Could not open the meeting room.",
+      errLivekit: "LiveKit is misconfigured or the server rejected the connection. Check environment variables.",
+      errUnauthorized: "Sign-in required.",
+      errNotFound: "Session not found.",
+      errForbidden: "You don’t have access to this session.",
+      errCancelled: "This session was cancelled.",
+      errNotJoinable: "Video isn’t available for this session.",
+      errEnded: "This session has already ended.",
+      errTooEarly: "You can join from up to 30 minutes before the scheduled start.",
+      remainingLabel: "Closes in",
+      wrapupWarning:
+        "Less than 5 minutes remain before the scheduled video window ends. The room will close automatically when time is up.",
+      extendTitle: "Extend time",
+      extendHint: "Add 1–120 minutes; both you and the client keep access until the new end time.",
+      extendMinutesLabel: "Minutes",
+      extendSubmit: "Extend",
+      extending: "Extending…",
+      extendErrInvalidMinutes: "Enter a valid number of minutes (1–120).",
+      extendErrForbidden: "You’re not allowed to extend this session.",
+      extendErrBadStatus: "This session can’t be extended in its current state.",
+      extendErrNotFound: "Session not found.",
+      extendErrRpc: "Could not extend the session. Try again.",
+      extendAdded: "+{minutes} min added. The countdown in the top bar shows the updated time left.",
+      userJoinedChat: "{name} joined the room.",
+      participantFallbackName: "Participant",
+      roomParticipantsOne: "1 person in the room",
+      roomParticipantsMany: "{count} people in the room",
+      roomCountTitle: "People currently connected to the video room",
     },
     notebook: {
       title: "Session notebook",
@@ -357,7 +428,18 @@ export const enMessages: AppMessages = {
       registerIntro: "A short registration flow; your identity is protected over encrypted channels.",
       terms: "Terms of Service",
       privacy: "Privacy Notice",
+      termsHref: "/guven#kosullar",
+      privacyHref: "/guven#kvkk",
+      footerPrefixTr: "Devam ederek ",
+      footerMiddleTr: " ve ",
+      footerSuffixTr: "’ni okuduğunuzu ve kabul ettiğinizi onaylarsınız.",
+      footerPrefixEn: "By continuing you agree to the ",
+      footerMiddleEn: " and the ",
+      footerSuffixEn: ".",
     },
+    brandDisclaimer:
+      "This interface is a product experience only; it does not create clinical or legal commitments. Care proceeds under professional judgement. Details:",
+    trustCenterLink: "Trust Center",
     mode: {
       login: "Sign in",
       register: "Create account",
@@ -471,6 +553,76 @@ export const enMessages: AppMessages = {
       s3: "Let’s align with your time",
       s4: "Matches close to you",
     },
+  },
+  trust: {
+    metaTitle: "Trust and privacy",
+    metaDescription:
+      "Data security, GDPR-style rights (KVKK), therapist verification, and crisis guidance. Trust overview for the therapy platform.",
+    kicker: "Transparency",
+    pageTitle: "Trust Center",
+    pageIntro:
+      "Therapy depends on trust. This page summarises how we protect data, what rights you have under privacy law, and what the platform does not replace. Final legal texts will be published and linked here.",
+    lastUpdated: "Last updated: May 2026 · informational summary, not legal advice.",
+    backLogin: "Sign in",
+    backHome: "Home",
+    tocTitle: "On this page",
+    tocData: "Data we process",
+    tocKvkk: "Privacy law & your rights",
+    tocTechnical: "Technical security",
+    tocTherapists: "Therapist verification",
+    tocCrisis: "Emergencies",
+    tocTerms: "Service scope",
+    tocContact: "How to reach us",
+    sectionDataTitle: "What data is processed, and why?",
+    sectionDataP1:
+      "Account and contact details, onboarding answers, booking records, notebook content you write, and therapist profile data are processed to deliver the service, schedule sessions, and operate accounts.",
+    sectionDataP2:
+      "We do not sell your data to third parties or use it to build advertising profiles. We keep data minimisation in mind and retain only what is needed.",
+    sectionDataP3:
+      "Other clients’ content is not visible to you; row-level security policies aim to separate access by role and ownership.",
+    sectionKvkkTitle: "Turkish Law (KVKK) and your rights",
+    sectionKvkkP1:
+      "Under Law No. 6698 on the Protection of Personal Data, the controller must provide transparent information. This section is a high-level summary.",
+    sectionKvkkP2:
+      "Lawful bases can include contract performance, legitimate interest, or—where offered—your explicit consent.",
+    sectionKvkkRightsTitle: "Key rights (summary)",
+    sectionKvkkR1: "Learn whether your personal data is processed",
+    sectionKvkkR2: "If processed, request information about it",
+    sectionKvkkR3: "Learn the purpose of processing and whether use matches that purpose",
+    sectionKvkkR4: "Know third parties to whom data is transferred, domestically or abroad",
+    sectionKvkkR5:
+      "Request correction if data are incomplete or inaccurate, and—where conditions apply—erasure or destruction",
+    sectionTechnicalTitle: "Technical and organisational measures",
+    sectionTechnicalP1:
+      "Traffic between your browser and our services is encrypted with TLS (HTTPS). Authentication relies on industry-standard session handling.",
+    sectionTechnicalP2:
+      "PostgreSQL row-level security policies on Supabase aim to ensure users only query rows they are authorised to see.",
+    sectionTherapistsTitle: "Therapist profiles",
+    sectionTherapistsP1:
+      "Listed therapist profiles go through an admin verification flow; we do not expose unverified professional claims as public listings.",
+    sectionTherapistsP2:
+      "The therapeutic relationship and ethical duties sit with the therapist and their regulations; the platform provides scheduling and secure workspace infrastructure.",
+    sectionCrisisTitle: "Emergencies and limits of the platform",
+    sectionCrisisAlert:
+      "This platform is not an emergency service. It does not provide crisis monitoring or continuous medical/psychiatric care.",
+    sectionCrisisP1:
+      "If there is immediate danger, risk of violence, or a medical emergency, call your local emergency number (e.g. 112 in Turkey) or go to the nearest emergency department.",
+    sectionCrisisP2:
+      "If you have thoughts of harming yourself or others, do not stay alone; reach someone you trust and use crisis resources available in your country.",
+    sectionTermsTitle: "Service scope and acceptable use",
+    sectionTermsP1:
+      "Copy and tools in the app are not medical diagnosis or treatment advice. Assessment and treatment plans belong to the professional relationship with your therapist.",
+    sectionTermsP2:
+      "The product may be in beta; features and texts can change. We aim to give reasonable notice for material changes.",
+    sectionTermsP3:
+      "Use a strong unique password for your account and avoid leaving sessions open on shared or public devices.",
+    sectionContactTitle: "Contact and requests",
+    sectionContactP1:
+      "A dedicated contact channel for privacy and KVKK requests will be published on this page as you approach public launch.",
+    sectionContactP2:
+      "Before launch, add your official support email (e.g. support@yourdomain.com) to configuration and to this page.",
+    footerLegal:
+      "This page is for transparency only; binding policies should be reviewed by legal counsel (and privacy specialists where applicable).",
   },
   sessionBooking: {
     closeAria: "Close",

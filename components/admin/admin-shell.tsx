@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 
 import { LanguageSwitcher } from "@/components/i18n/language-switcher";
+import { ThemeToggle } from "@/components/theme/theme-toggle";
 import { useI18n } from "@/components/i18n/i18n-provider";
 import { siteConfig } from "@/config/site";
 import { SignOutButton } from "@/components/dashboard/sign-out-button";
@@ -97,6 +98,7 @@ export function AdminShell({ displayName, children }: { displayName: string; chi
           <header className="sticky top-0 z-20 flex h-14 items-center justify-between gap-3 border-b border-border/40 bg-background/55 px-4 backdrop-blur-xl sm:px-6">
             <p className="text-[0.72rem] tracking-[0.12em] text-muted-foreground uppercase">{t("admin.shell.management")}</p>
             <div className="flex items-center gap-2">
+              <ThemeToggle />
               <LanguageSwitcher />
               <p className="hidden text-[0.72rem] text-muted-foreground/80 sm:block">{t("admin.shell.auditHint")}</p>
             </div>

@@ -1,7 +1,8 @@
+export type MoodMetricId = "balance" | "energy" | "connection";
+
 export type MoodSnapshot = {
-  label: string;
+  id: MoodMetricId;
   value: number;
-  hint: string;
 };
 
 function splitMix(seed: string) {
@@ -26,20 +27,8 @@ export function moodSnapshotForUser(userId: string): MoodSnapshot[] {
   const bag = 58 + (next() % 30);
 
   return [
-    {
-      label: "Denge",
-      value: denge,
-      hint: "İç ritmin bugünkü yansıması—tıbbi ölçüm değildir.",
-    },
-    {
-      label: "Enerji",
-      value: enerji,
-      hint: "Hafif bir öz-değerlendirme hissi; oyunlaştırılmış bir bakış.",
-    },
-    {
-      label: "Bağ",
-      value: bag,
-      hint: "Yakınlık ve güven hissine dair yumuşak bir çerçeve.",
-    },
+    { id: "balance", value: denge },
+    { id: "energy", value: enerji },
+    { id: "connection", value: bag },
   ];
 }

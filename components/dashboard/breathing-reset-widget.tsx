@@ -1,39 +1,135 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useLayoutEffect, useState } from "react";
+import { motion, useReducedMotion } from "framer-motion";
 
+import { useI18n } from "@/components/i18n/i18n-provider";
 import { premiumEase } from "@/lib/animations/easing";
 import { cn } from "@/lib/utils";
 
+const PHASE_MS = 4000;
+const CYCLE_MS = PHASE_MS * 4;
+
+const PHASE_KEYS = [
+  "dashboard.sections.breathPhaseInhale",
+  "dashboard.sections.breathPhaseHoldIn",
+  "dashboard.sections.breathPhaseExhale",
+  "dashboard.sections.breathPhaseHoldOut",
+] as const;
+
 export function BreathingResetWidget({ className }: { className?: string }) {
+  const { t } = useI18n();
+  const reduceMotion = useReducedMotion();
+  const prefersReduced = reduceMotion === true;
+  const [phaseIdx, setPhaseIdx] = useState(0);
+
+  useLayoutEffect(() => {
+    if (prefersReduced) return;
+    setPhaseIdx(0);
+    const id = window.setInterval(() => {
+      setPhaseIdx((i) => (i + 1) % 4);
+    }, PHASE_MS);
+    return () => window.clearInterval(id);
+  }, [prefersReduced]);
+
   return (
     <div
       className={cn(
-        "relative overflow-hidden rounded-[var(--radius-xl)] border border-border/50 bg-[color-mix(in_oklch,var(--color-card),transparent_12%)] p-7 shadow-[var(--shadow-glass)] backdrop-blur-[16px]",
+        "relative overflow-hidden rounded-[var(--radius-xl)] border border-border/45 bg-[color-mix(in_oklch,var(--color-card),transparent_10%)] p-7 shadow-[var(--shadow-glass)] backdrop-blur-[18px]",
         className,
       )}
     >
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(280px_circle_at_50%_0%,oklch(0.9_0.03_95/0.06),transparent_62%)]" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(380px_circle_at_50%_0%,oklch(0.62_0.12_245/0.11),transparent_58%)] dark:bg-[radial-gradient(360px_circle_at_50%_0%,oklch(0.7_0.1_250/0.14),transparent_60%)]" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(120%_80%_at_50%_100%,oklch(0.55_0.06_270/0.05),transparent_70%)]" />
+
       <div className="relative flex flex-col items-center text-center">
-        <p className="text-[0.72rem] tracking-[0.16em] text-muted-foreground/85 uppercase">Mikro mola</p>
-        <h3 className="mt-2 font-display text-xl tracking-[-0.02em]">Nefes reset</h3>
-        <p className="mt-2 max-w-xs text-[0.82rem] leading-relaxed text-muted-foreground">
-          Daireye odaklan—genişlerken nefes al, küçülürken ver. Kendi ritminde kal.
+        <p className="text-[0.72rem] tracking-[0.16em] text-muted-foreground/90 uppercase">
+          {t("dashboard.sections.breathKicker")}
         </p>
-        <div className="relative mt-8 flex h-40 w-full max-w-[13rem] items-center justify-center">
+        <h3 className="mt-2 font-display text-xl tracking-[-0.02em]">{t("dashboard.sections.breathTitle")}</h3>
+        <p className="mt-2 max-w-[19rem] text-[0.82rem] leading-relaxed text-muted-foreground">
+          {t("dashboard.sections.breathBody")}
+        </p>
+        <p className="mt-3 text-[0.68rem] tabular-nums tracking-[0.08em] text-muted-foreground/75 uppercase">
+          {t("dashboard.sections.breathRhythmHint")}
+        </p>
+
+        <div className="relative mt-9 flex h-44 w-full max-w-[15rem] items-center justify-center">
           <motion.div
-            className="absolute rounded-full border border-white/10 bg-white/[0.03]"
-            animate={{ scale: [1, 1.14, 1.14, 1], opacity: [0.5, 0.75, 0.75, 0.5] }}
-            transition={{ duration: 12, repeat: Infinity, ease: premiumEase }}
-            style={{ width: "7.5rem", height: "7.5rem" }}
+            className="absolute rounded-full border border-primary/15 bg-primary/[0.04] dark:border-white/[0.12] dark:bg-white/[0.03]"
+            animate={
+              prefersReduced
+                ? { scale: 1, opacity: 0.45 }
+                : {
+                    scale: [1, 1.26, 1.26, 1, 1],
+                    opacity: [0.38, 0.62, 0.62, 0.38, 0.38],
+                  }
+            }
+            transition={
+              prefersReduced
+                ? { duration: 0 }
+                : {
+                    duration: CYCLE_MS / 1000,
+                    repeat: Infinity,
+                    ease: "linear",
+                    times: [0, 0.25, 0.5, 0.75, 1],
+                  }
+            }
+            style={{ width: "8.25rem", height: "8.25rem" }}
           />
           <motion.div
-            className="absolute rounded-full border border-white/[0.18] bg-gradient-to-br from-white/[0.1] to-white/[0.02]"
-            animate={{ scale: [1, 1.08, 1.08, 1] }}
-            transition={{ duration: 12, repeat: Infinity, ease: premiumEase }}
-            style={{ width: "5.25rem", height: "5.25rem" }}
+            className="absolute rounded-full border border-border/60 bg-gradient-to-br from-foreground/[0.09] to-transparent dark:from-white/[0.14] dark:to-white/[0.02]"
+            animate={
+              prefersReduced
+                ? { scale: 1, opacity: 0.78 }
+                : {
+                    scale: [1, 1.18, 1.18, 1, 1],
+                    opacity: [0.65, 0.92, 0.92, 0.68, 0.65],
+                  }
+            }
+            transition={
+              prefersReduced
+                ? { duration: 0 }
+                : {
+                    duration: CYCLE_MS / 1000,
+                    repeat: Infinity,
+                    ease: "linear",
+                    times: [0, 0.25, 0.5, 0.75, 1],
+                  }
+            }
+            style={{ width: "6rem", height: "6rem" }}
           />
-          <span className="relative text-[0.72rem] tracking-[0.14em] text-muted-foreground uppercase">Yavaş</span>
+          <motion.div
+            className="absolute rounded-full bg-gradient-to-b from-foreground/[0.12] to-foreground/[0.04] shadow-[inset_0_1px_0_oklch(1_0_0/0.2)] dark:from-white/18 dark:to-white/[0.05]"
+            animate={
+              prefersReduced
+                ? { scale: 1 }
+                : {
+                    scale: [1, 1.12, 1.12, 1, 1],
+                  }
+            }
+            transition={
+              prefersReduced
+                ? { duration: 0 }
+                : {
+                    duration: CYCLE_MS / 1000,
+                    repeat: Infinity,
+                    ease: "linear",
+                    times: [0, 0.25, 0.5, 0.75, 1],
+                  }
+            }
+            style={{ width: "4.35rem", height: "4.35rem" }}
+          />
+
+          <motion.span
+            key={prefersReduced ? "static" : PHASE_KEYS[phaseIdx]}
+            initial={prefersReduced ? false : { opacity: 0, y: 10, filter: "blur(4px)" }}
+            animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+            transition={prefersReduced ? { duration: 0 } : { duration: 0.45, ease: premiumEase }}
+            className="relative z-[1] max-w-[7rem] text-center text-[0.7rem] font-semibold tracking-[0.18em] text-foreground uppercase"
+          >
+            {prefersReduced ? t("dashboard.sections.breathPhaseInhale") : t(PHASE_KEYS[phaseIdx])}
+          </motion.span>
         </div>
       </div>
     </div>

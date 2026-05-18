@@ -9,6 +9,7 @@ import { motion } from "framer-motion";
 import type { TherapistProfileRow } from "@/types/database";
 import { siteConfig } from "@/config/site";
 import { SignOutButton } from "@/components/dashboard/sign-out-button";
+import { ThemeToggle } from "@/components/theme/theme-toggle";
 import { useI18n } from "@/components/i18n/i18n-provider";
 import { premiumEase } from "@/lib/animations/easing";
 import { cn } from "@/lib/utils";
@@ -83,7 +84,7 @@ export function TherapistShell({
         </aside>
         <div className="flex min-w-0 flex-1 flex-col">
           <header className="sticky top-0 z-20 border-b border-border/40 bg-background/55 px-4 py-4 backdrop-blur-xl sm:px-6">
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
               <div>
                 <p className="text-[0.72rem] tracking-[0.12em] text-muted-foreground uppercase">
                   {t("therapist.shell.headerLabel")}
@@ -92,12 +93,15 @@ export function TherapistShell({
                   {staffProfile?.full_name ?? t("therapist.shell.profileFallback")}
                 </p>
               </div>
-              {!staffProfile ? (
-                <div className="flex items-start gap-2 rounded-xl border border-amber-500/18 bg-amber-500/[0.07] px-3 py-2 text-[0.78rem] text-amber-50/95">
-                  <HeartHandshake className="mt-0.5 size-4 shrink-0" />
-                  <p>{t("therapist.shell.unlinked")}</p>
-                </div>
-              ) : null}
+              <div className="flex min-w-0 flex-col items-stretch gap-2 sm:max-w-md sm:items-end">
+                <ThemeToggle className="self-end" />
+                {!staffProfile ? (
+                  <div className="flex items-start gap-2 rounded-xl border border-amber-500/18 bg-amber-500/[0.07] px-3 py-2 text-[0.78rem] text-amber-50/95">
+                    <HeartHandshake className="mt-0.5 size-4 shrink-0" />
+                    <p>{t("therapist.shell.unlinked")}</p>
+                  </div>
+                ) : null}
+              </div>
             </div>
           </header>
           <main className="flex-1 px-4 py-8 sm:px-6 sm:py-9">{children}</main>

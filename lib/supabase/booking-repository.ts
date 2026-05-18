@@ -3,7 +3,14 @@ import type { BookedSessionRow, TherapistProfileRow } from "@/types/database";
 
 export type BookedSessionListRow = Pick<
   BookedSessionRow,
-  "id" | "profile_id" | "availability_id" | "starts_at" | "ends_at" | "status" | "payment_status"
+  | "id"
+  | "profile_id"
+  | "availability_id"
+  | "starts_at"
+  | "ends_at"
+  | "status"
+  | "payment_status"
+  | "video_call_extended_until"
 > & {
   therapist_profiles: Pick<TherapistProfileRow, "full_name" | "professional_title" | "verified"> | null;
 };
@@ -23,6 +30,7 @@ export async function fetchBookingsForUser(
         ends_at,
         status,
         payment_status,
+        video_call_extended_until,
         therapist_profiles (
           full_name,
           professional_title,
