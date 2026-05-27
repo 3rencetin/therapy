@@ -1,7 +1,6 @@
 "use client";
 
 import type { DashboardBootstrap } from "@/lib/dashboard/load-dashboard-data";
-import { moodSnapshotForUser } from "@/lib/dashboard/mood-snapshot";
 import {
   buildWelcomeSubtitle,
   insightParagraph,
@@ -11,7 +10,7 @@ import { useI18n } from "@/components/i18n/i18n-provider";
 
 import { BreathingResetWidget } from "./breathing-reset-widget";
 import { DashboardJourneySection } from "./sections/dashboard-journey-section";
-import { DashboardMoodSection } from "./sections/dashboard-mood-section";
+import { DashboardOverviewSection } from "./sections/dashboard-overview-section";
 import { DashboardPrivacySection } from "./sections/dashboard-privacy-section";
 import { DashboardSessionsSection } from "./sections/dashboard-sessions-section";
 import { DashboardTherapistsSection } from "./sections/dashboard-therapists-section";
@@ -20,17 +19,14 @@ import { DashboardWelcomeSection } from "./sections/dashboard-welcome-section";
 
 export function DashboardHome({
   displayName,
-  userId,
   bootstrap,
 }: {
   displayName: string;
-  userId: string;
   bootstrap: DashboardBootstrap;
 }) {
   const { t } = useI18n();
   const welcomeSubtitle = buildWelcomeSubtitle(bootstrap.wizard, t);
   const insight = insightParagraph(bootstrap.wizard, t);
-  const moods = moodSnapshotForUser(userId);
 
   return (
     <div className="mx-auto max-w-6xl space-y-14 pb-20">
@@ -47,7 +43,11 @@ export function DashboardHome({
         </div>
         <aside className="space-y-8 xl:sticky xl:top-20">
           <BreathingResetWidget />
-          <DashboardMoodSection snapshots={moods} />
+          <DashboardOverviewSection
+            nextSession={bootstrap.nextSession}
+            upcomingSessionCount={bootstrap.upcomingSessionCount}
+            onboardingCompleted={Boolean(bootstrap.onboardingCompletedAt)}
+          />
           <DashboardWellnessInsightSection text={insight} />
         </aside>
       </div>

@@ -213,6 +213,10 @@
     animation: float-soft 5s ease-in-out infinite;
   }
 
+  .auth-page {
+    background-color: var(--color-background);
+  }
+
   /* LiveKit görüşme — tam yükseklik + okunur kontroller */
   .terapi-video-room {
     display: flex;

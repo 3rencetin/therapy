@@ -22,10 +22,6 @@ export default async function DashboardPage() {
   const bootstrap = await loadDashboardBootstrap(supabase, user.id);
 
   return (
-    <DashboardHome
-      displayName={displayName}
-      userId={user.id}
-      bootstrap={bootstrap}
-    />
+    <DashboardHome displayName={displayName} bootstrap={bootstrap} />
   );
 }

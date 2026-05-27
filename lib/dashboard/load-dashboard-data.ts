@@ -1,5 +1,7 @@
 import type { AppSupabaseClient } from "@/lib/supabase/app-client";
+import { countUpcomingSessions, pickNextUpcomingSession } from "@/lib/dashboard/next-session";
 import { fetchOnboardingAnswersRow } from "@/lib/supabase/onboarding-repository";
+import { fetchBookingsForUser, type BookedSessionListRow } from "@/lib/supabase/booking-repository";
 import { fetchVerifiedTherapistProfiles } from "@/lib/supabase/therapist-repository";
 import type { TherapistProfileRow } from "@/types/database";
 import { onboardingRowToWizard } from "@/lib/onboarding/db-mapper";
@@ -20,19 +22,23 @@ export type DashboardBootstrap = {
   onboardingUpdatedAt: string | null;
   recommended: TherapistProfileRow[];
   therapistTotal: number;
+  nextSession: BookedSessionListRow | null;
+  upcomingSessionCount: number;
 };
 
 export async function loadDashboardBootstrap(
   client: AppSupabaseClient,
   userId: string,
 ): Promise<DashboardBootstrap> {
-  const [onboardingRow, pool] = await Promise.all([
+  const [onboardingRow, pool, bookings] = await Promise.all([
     fetchOnboardingAnswersRow(client, userId).catch(() => null),
     fetchVerifiedTherapistProfiles(client).catch(() => []),
+    fetchBookingsForUser(client, userId).catch(() => []),
   ]);
 
   const wizard = onboardingRow ? onboardingRowToWizard(onboardingRow) : emptyWizard;
   const recommended = rankTherapistProfiles(wizard, pool);
+  const nextSession = pickNextUpcomingSession(bookings);
 
   return {
     wizard,
@@ -40,5 +46,7 @@ export async function loadDashboardBootstrap(
     onboardingUpdatedAt: onboardingRow?.updated_at ?? null,
     recommended,
     therapistTotal: pool.length,
+    nextSession,
+    upcomingSessionCount: countUpcomingSessions(bookings),
   };
 }

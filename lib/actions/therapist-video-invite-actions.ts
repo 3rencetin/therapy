@@ -32,7 +32,7 @@ export async function createTherapistVideoInviteAction(input: {
   const staff = await getTherapistProfileForUser(supabase, user.id);
   if (!staff) return { ok: false, message: "FORBIDDEN" };
 
-  let sessionId: string | null = input.sessionId ?? null;
+  const sessionId: string | null = input.sessionId ?? null;
   let invitedUserId: string | null = input.invitedUserId ?? null;
 
   if (sessionId) {

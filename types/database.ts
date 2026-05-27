@@ -337,6 +337,57 @@ export type Database = {
         };
         Relationships: [];
       };
+      guide_articles: {
+        Row: {
+          id: string;
+          slug: string;
+          title: string;
+          excerpt: string;
+          cover_image_url: string | null;
+          category: string;
+          tags: string[];
+          body: string;
+          status: string;
+          is_featured: boolean;
+          published_at: string | null;
+          author_id: string | null;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          slug: string;
+          title: string;
+          excerpt?: string;
+          cover_image_url?: string | null;
+          category?: string;
+          tags?: string[];
+          body?: string;
+          status?: string;
+          is_featured?: boolean;
+          published_at?: string | null;
+          author_id?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          slug?: string;
+          title?: string;
+          excerpt?: string;
+          cover_image_url?: string | null;
+          category?: string;
+          tags?: string[];
+          body?: string;
+          status?: string;
+          is_featured?: boolean;
+          published_at?: string | null;
+          author_id?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
       therapist_video_invites: {
         Row: {
           id: string;

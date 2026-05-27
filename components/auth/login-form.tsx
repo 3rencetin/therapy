@@ -1,12 +1,11 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { Loader2 } from "lucide-react";
+import { Loader2, Lock, Mail } from "lucide-react";
 
 import { useI18n } from "@/components/i18n/i18n-provider";
+import { AuthField } from "@/components/auth/auth-field";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 
 import { GoogleAuthButton } from "./google-auth-button";
@@ -70,57 +69,64 @@ export function LoginForm() {
   }
 
   return (
-    <form onSubmit={onSubmit} className="space-y-6">
-      <div className="space-y-2">
-        <Label htmlFor="login-email">{t("auth.login.email")}</Label>
-        <Input
-          id="login-email"
-          type="email"
-          autoComplete="email"
-          placeholder={t("auth.login.emailPlaceholder")}
-          value={email}
-          onChange={(ev) => setEmail(ev.target.value)}
-          required
-        />
-      </div>
-      <div className="space-y-2">
-        <div className="flex items-center justify-between gap-3">
-          <Label htmlFor="login-password">{t("auth.login.password")}</Label>
+    <form onSubmit={onSubmit} className="space-y-5">
+      <AuthField
+        id="login-email"
+        label={t("auth.login.email")}
+        type="email"
+        autoComplete="email"
+        placeholder={t("auth.login.emailPlaceholder")}
+        value={email}
+        onChange={(ev) => setEmail(ev.target.value)}
+        required
+        icon={<Mail className="size-4" strokeWidth={1.6} />}
+      />
+
+      <AuthField
+        id="login-password"
+        label={t("auth.login.password")}
+        type="password"
+        autoComplete="current-password"
+        placeholder={t("auth.login.passwordPlaceholder")}
+        value={password}
+        onChange={(ev) => setPassword(ev.target.value)}
+        required
+        minLength={8}
+        icon={<Lock className="size-4" strokeWidth={1.6} />}
+        labelAction={
           <button
             type="button"
             onClick={onForgot}
             disabled={resetting}
-            className="text-[0.8125rem] text-muted-foreground underline-offset-4 transition-colors hover:text-foreground hover:underline disabled:opacity-45"
+            className="text-[0.78rem] font-medium text-[#007AFF] transition-opacity hover:underline disabled:opacity-45"
           >
             {t("auth.login.forgot")}
           </button>
-        </div>
-        <Input
-          id="login-password"
-          type="password"
-          autoComplete="current-password"
-          placeholder="••••••••"
-          value={password}
-          onChange={(ev) => setPassword(ev.target.value)}
-          required
-          minLength={8}
-        />
-      </div>
+        }
+      />
 
-      <label className="flex cursor-pointer items-center gap-2.5 text-[0.85rem] text-muted-foreground select-none">
+      <label className="flex cursor-pointer items-center gap-2.5 rounded-xl border border-border/50 bg-muted/30 px-3.5 py-2.5 text-[0.84rem] text-muted-foreground select-none">
         <input
           type="checkbox"
           checked={remember}
           onChange={(ev) => setRemember(ev.target.checked)}
-          className="size-4 rounded border border-border/80 bg-input accent-[oklch(0.86_0.05_95)]"
+          className="size-4 rounded border-border accent-[#007AFF]"
         />
         {t("auth.login.rememberDevice")}
       </label>
 
-      {error ? <p className="text-[0.85rem] leading-relaxed text-[oklch(0.78_0.12_22)]">{error}</p> : null}
-      {message ? <p className="text-[0.85rem] leading-relaxed text-muted-foreground">{message}</p> : null}
+      {error ? (
+        <p className="rounded-xl border border-[#FF3B30]/20 bg-[#FF3B30]/[0.06] px-3 py-2.5 text-[0.84rem] text-[#C41E12]" role="alert">
+          {error}
+        </p>
+      ) : null}
+      {message ? (
+        <p className="rounded-xl border border-[#34C759]/25 bg-[#34C759]/[0.08] px-3 py-2.5 text-[0.84rem] text-[#1B7A36]">
+          {message}
+        </p>
+      ) : null}
 
-      <Button type="submit" disabled={loading} className="w-full">
+      <Button type="submit" disabled={loading} size="lg" className="w-full">
         {loading ? (
           <span className="inline-flex items-center gap-2">
             <Loader2 className="size-4 animate-spin" />
@@ -131,9 +137,9 @@ export function LoginForm() {
         )}
       </Button>
 
-      <div className="relative py-1">
-        <div className="absolute inset-x-0 top-1/2 h-px -translate-y-1/2 bg-border/70" />
-        <span className="relative mx-auto block w-fit bg-[color-mix(in_oklch,var(--color-card),transparent_22%)] px-3 text-center text-[0.75rem] tracking-wide text-muted-foreground/80 uppercase">
+      <div className="relative py-2">
+        <div className="absolute inset-x-0 top-1/2 h-px bg-border/70" />
+        <span className="relative mx-auto block w-fit bg-card px-3 text-[0.72rem] font-medium tracking-[0.08em] text-muted-foreground uppercase">
           {t("auth.login.separator")}
         </span>
       </div>

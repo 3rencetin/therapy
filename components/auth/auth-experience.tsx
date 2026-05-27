@@ -31,16 +31,17 @@ export function AuthExperience() {
 
   return (
     <AuthShell>
-      <div className="pointer-events-none absolute right-0 top-0 z-30 p-4 sm:p-6">
-        <div className="pointer-events-auto flex flex-wrap items-center justify-end gap-2">
-          <LanguageSwitcher />
-        </div>
-      </div>
-      <div className="border-b border-border/50 bg-background/40 lg:border-b-0 lg:border-r lg:border-border/45">
+      <div className="flex min-h-[280px] flex-col border-b border-border/50 lg:min-h-dvh lg:border-b-0 lg:border-r lg:border-border/45">
         <AuthBrandPanel />
       </div>
-      <div className="relative bg-[radial-gradient(1200px_circle_at_50%_-10%,oklch(0.22_0.03_262/0.55),transparent_55%)]">
-        <AuthGlassCard mode={mode} onModeChange={setMode} notice={notice} />
+
+      <div className="relative flex flex-col">
+        <header className="flex shrink-0 items-center justify-end gap-3 px-6 pt-5 sm:px-10 lg:px-12 lg:pt-8">
+          <LanguageSwitcher />
+        </header>
+        <div className="flex flex-1 flex-col justify-center px-6 pb-10 pt-4 sm:px-10 lg:px-12 lg:pb-14">
+          <AuthGlassCard mode={mode} onModeChange={setMode} notice={notice} />
+        </div>
       </div>
     </AuthShell>
   );

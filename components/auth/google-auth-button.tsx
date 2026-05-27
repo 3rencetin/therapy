@@ -22,16 +22,16 @@ export function GoogleAuthButton() {
   }
 
   return (
-    <Button type="button" variant="outline" onClick={onClick} disabled={loading} className="w-full">
+    <Button type="button" variant="outline" size="lg" onClick={onClick} disabled={loading} className="w-full bg-card">
       {loading ? (
         <span className="inline-flex items-center gap-2">
           <Loader2 className="size-4 animate-spin" />
           {t("auth.googleRedirecting")}
         </span>
       ) : (
-        <span className="inline-flex items-center gap-2">
+        <span className="inline-flex items-center gap-2.5">
           <GoogleGlyph />
-          {t("auth.google")}
+          <span>{t("auth.google")}</span>
         </span>
       )}
     </Button>
@@ -40,26 +40,22 @@ export function GoogleAuthButton() {
 
 function GoogleGlyph() {
   return (
-    <svg aria-hidden viewBox="0 0 24 24" className="size-4">
+    <svg aria-hidden viewBox="0 0 24 24" className="size-[1.125rem]">
       <path
-        fill="currentColor"
-        d="M21.35 12.24c0-.74-.07-1.44-.19-2.12H12v4.01h5.26c-.23 1.22-.93 2.25-1.98 2.95v2.46h3.2c1.87-1.72 2.87-4.24 2.87-7.3z"
-        opacity="0.9"
+        fill="#4285F4"
+        d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
       />
       <path
-        fill="currentColor"
-        d="M12 22c2.7 0 4.96-.89 6.62-2.41l-3.2-2.46c-.89.6-2.03.95-3.42.95-2.63 0-4.86-1.78-5.65-4.17H3.1v2.55A10.01 10.01 0 0012 22z"
-        opacity="0.55"
+        fill="#34A853"
+        d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
       />
       <path
-        fill="currentColor"
-        d="M6.35 13.91c-.2-.6-.31-1.24-.31-1.91s.11-1.31.31-1.91V7.54H3.1A10.01 10.01 0 002 12c0 1.62.39 3.14 1.1 4.46l3.25-2.55z"
-        opacity="0.35"
+        fill="#FBBC05"
+        d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
       />
       <path
-        fill="currentColor"
-        d="M12 5.94c1.48 0 2.81.51 3.85 1.51l2.89-2.89C16.95 2.99 14.7 2 12 2 7.7 2 3.99 4.72 3.1 8.54l3.25 2.55c.79-2.39 3.02-4.15 5.65-4.15z"
-        opacity="0.65"
+        fill="#EA4335"
+        d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
       />
     </svg>
   );

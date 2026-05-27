@@ -3,7 +3,7 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Calendar, Compass, Home, Shield, Sparkles, Users } from "lucide-react";
+import { BookOpen, Calendar, Compass, Home, Shield, Sparkles, Users } from "lucide-react";
 
 import { useI18n } from "@/components/i18n/i18n-provider";
 import { cn } from "@/lib/utils";
@@ -47,6 +47,12 @@ export function DashboardSidebarNav({
       labelKey: "dashboard.nav.sessions",
       icon: <Calendar className="size-[1.1rem] stroke-[1.5]" />,
       isActive: (p) => p.startsWith("/dashboard/sessions"),
+    },
+    {
+      href: "/dashboard/rehber",
+      labelKey: "dashboard.nav.guide",
+      icon: <BookOpen className="size-[1.1rem] stroke-[1.5]" />,
+      isActive: (p) => p.startsWith("/dashboard/rehber"),
     },
     {
       href: "/dashboard/journey",

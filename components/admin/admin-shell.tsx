@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   Activity,
+  BookOpen,
   LayoutDashboard,
   Radio,
   Shield,
@@ -29,6 +30,7 @@ const iconMap = {
   Activity,
   Radio,
   Shield,
+  BookOpen,
 } as const;
 
 type NavKey = keyof typeof iconMap;
@@ -40,6 +42,7 @@ const navKeys: { href: string; labelKey: string; icon: NavKey }[] = [
   { href: "/admin/sessions", labelKey: "admin.shell.sessions", icon: "Activity" },
   { href: "/admin/rooms", labelKey: "admin.shell.rooms", icon: "Radio" },
   { href: "/admin/reports", labelKey: "admin.shell.reports", icon: "Shield" },
+  { href: "/admin/rehber", labelKey: "admin.shell.guide", icon: "BookOpen" },
 ];
 
 export function AdminShell({ displayName, children }: { displayName: string; children: ReactNode }) {
