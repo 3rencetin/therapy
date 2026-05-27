@@ -32,10 +32,13 @@ export default async function SessionVideoCallPage({ params }: { params: Promise
 
   return (
     <SessionVideoCallClient
-      sessionId={sessionId}
+      tokenSource={{ type: "session", sessionId }}
       backHref="/dashboard/sessions"
-      initialTiming={ctx.timing}
-      isTherapist={ctx.isTherapist}
+      sessionMode={{
+        sessionId,
+        initialTiming: ctx.timing,
+        isTherapist: ctx.isTherapist,
+      }}
     />
   );
 }

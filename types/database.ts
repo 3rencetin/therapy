@@ -337,6 +337,42 @@ export type Database = {
         };
         Relationships: [];
       };
+      therapist_video_invites: {
+        Row: {
+          id: string;
+          profile_id: string;
+          session_id: string | null;
+          invited_user_id: string | null;
+          created_by: string;
+          token: string;
+          expires_at: string;
+          used_at: string | null;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          profile_id: string;
+          session_id?: string | null;
+          invited_user_id?: string | null;
+          created_by: string;
+          token: string;
+          expires_at: string;
+          used_at?: string | null;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          profile_id?: string;
+          session_id?: string | null;
+          invited_user_id?: string | null;
+          created_by?: string;
+          token?: string;
+          expires_at?: string;
+          used_at?: string | null;
+          created_at?: string;
+        };
+        Relationships: [];
+      };
     };
     Views: Record<string, never>;
     Functions: {

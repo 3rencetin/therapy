@@ -20,11 +20,12 @@ export function DashboardWelcomeSection({
       variants={containerRise}
       initial="hidden"
       animate="show"
-      className="relative overflow-hidden rounded-[var(--radius-xl)] border border-border/50 bg-[color-mix(in_oklch,var(--color-card),transparent_14%)] p-8 shadow-[var(--shadow-glass)] backdrop-blur-[var(--blur-glass)] sm:p-10"
+      className="relative overflow-hidden surface-hero rounded-[var(--radius-xl)] p-8 backdrop-blur-[var(--blur-glass)] sm:p-10"
     >
-      <div className="pointer-events-none absolute -right-24 top-0 h-56 w-56 rounded-full bg-[radial-gradient(circle,oklch(0.55_0.08_255/0.12),transparent_68%)] blur-2xl" />
+      <div className="pointer-events-none absolute -right-20 top-0 h-64 w-64 rounded-full bg-[radial-gradient(circle,#007AFF28,transparent_68%)] blur-2xl" />
+      <div className="pointer-events-none absolute -left-16 bottom-0 h-48 w-48 rounded-full bg-[radial-gradient(circle,#5856D622,transparent_68%)] blur-2xl" />
       <div className="relative max-w-2xl space-y-4">
-        <motion.p variants={fadeUp} className="text-[0.8125rem] tracking-[0.14em] text-muted-foreground/90 uppercase">
+        <motion.p variants={fadeUp} className="text-[0.8125rem] font-semibold tracking-[0.14em] text-[#007AFF] uppercase">
           {t("dashboard.sections.welcomeKicker")}
         </motion.p>
         <motion.h1
@@ -33,7 +34,7 @@ export function DashboardWelcomeSection({
         >
           {t("dashboard.sections.welcomeHello", { name: first })}
         </motion.h1>
-        <motion.p variants={fadeUp} className="max-w-xl text-pretty text-[1.02rem] leading-[1.7] text-muted-foreground">
+        <motion.p variants={fadeUp} className="max-w-xl text-pretty text-[1.02rem] leading-[1.7] text-[#48484a]">
           {subtitle}
         </motion.p>
       </div>

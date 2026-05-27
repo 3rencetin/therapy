@@ -22,7 +22,7 @@ export function DashboardWellnessInsightSection({ text }: { text: string }) {
           <Leaf className="size-5 stroke-[1.4]" />
         </span>
         <div className="min-w-0 space-y-2">
-          <p className="text-[0.72rem] tracking-[0.16em] text-muted-foreground/85 uppercase">
+          <p className="text-[0.72rem] font-semibold tracking-[0.16em] text-[#0070E8] uppercase">
             {t("dashboard.sections.wellnessKicker")}
           </p>
           <h3 className="font-display text-lg tracking-[-0.02em] text-foreground sm:text-xl">

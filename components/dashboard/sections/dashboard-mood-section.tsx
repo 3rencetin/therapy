@@ -54,7 +54,7 @@ export function DashboardMoodSection({ snapshots }: { snapshots: MoodSnapshot[] 
   return (
     <section className="space-y-5">
       <div>
-        <p className="text-[0.72rem] tracking-[0.16em] text-muted-foreground/85 uppercase">
+        <p className="text-[0.72rem] font-semibold tracking-[0.16em] text-[#0070E8] uppercase">
           {t("dashboard.sections.moodKicker")}
         </p>
         <h3 className="font-display text-lg tracking-[-0.02em] sm:text-xl">{t("dashboard.sections.moodTitle")}</h3>
@@ -77,7 +77,7 @@ export function DashboardMoodSection({ snapshots }: { snapshots: MoodSnapshot[] 
               key={m.id}
               variants={onboardingListItem}
               className={cn(
-                "relative overflow-hidden rounded-[var(--radius-xl)] border border-border/40 bg-gradient-to-br p-4 shadow-[var(--shadow-glass)] backdrop-blur-[14px] transition-[box-shadow,transform] duration-500 ease-out hover:border-border/55",
+                "relative overflow-hidden surface-premium rounded-[var(--radius-xl)] bg-gradient-to-br p-4 backdrop-blur-[14px] transition-[box-shadow,transform] duration-500 ease-out hover:border-[#007AFF33]",
                 styles.card,
                 styles.glow,
                 "motion-safe:hover:-translate-y-0.5",
@@ -99,7 +99,7 @@ export function DashboardMoodSection({ snapshots }: { snapshots: MoodSnapshot[] 
                   {m.value}
                 </motion.span>
               </div>
-              <div className="relative mt-4 h-2 overflow-hidden rounded-full bg-foreground/[0.07] dark:bg-white/[0.08]">
+              <div className="relative mt-4 h-2 overflow-hidden rounded-full bg-muted">
                 <motion.div
                   className={cn("h-full rounded-full bg-gradient-to-r", styles.bar)}
                   initial={{ width: 0 }}

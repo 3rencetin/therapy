@@ -35,7 +35,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
   const locale = await getServerLocale();
   const messages = getMessages(locale);
   return (
-    <html lang={intlLocaleForApp(locale)} data-theme="dark" suppressHydrationWarning>
+    <html lang={intlLocaleForApp(locale)} data-theme="light" suppressHydrationWarning>
       <body className={`${dmSans.variable} ${instrument.variable} font-sans`}>
         <ThemeScript />
         <I18nProvider locale={locale} messages={messages}>

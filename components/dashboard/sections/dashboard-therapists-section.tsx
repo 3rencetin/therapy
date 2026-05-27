@@ -22,10 +22,10 @@ export function DashboardTherapistsSection({
     <section id="terapistler" className="scroll-mt-24 space-y-5">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div className="space-y-1">
-          <p className="text-[0.72rem] tracking-[0.16em] text-muted-foreground/85 uppercase">
+          <p className="text-[0.72rem] font-semibold tracking-[0.16em] text-[#0070E8] uppercase">
             {t("dashboard.sections.therapistsKicker")}
           </p>
-          <h2 className="font-display text-2xl tracking-[-0.02em] sm:text-[1.75rem]">
+          <h2 className="section-heading">
             {t("dashboard.sections.therapistsTitle")}
           </h2>
           <p className="max-w-md text-[0.9rem] leading-relaxed text-muted-foreground">
@@ -43,7 +43,7 @@ export function DashboardTherapistsSection({
       </div>
 
       {recommended.length === 0 ? (
-        <div className="rounded-[var(--radius-xl)] border border-dashed border-border/55 bg-white/[0.02] px-6 py-14 text-center">
+        <div className="surface-premium rounded-[var(--radius-xl)] border border-dashed px-6 py-14 text-center">
           <p className="font-display text-lg text-foreground">{t("dashboard.sections.therapistsEmptyTitle")}</p>
           <p className="mx-auto mt-2 max-w-sm text-[0.9rem] leading-relaxed text-muted-foreground">
             {t("dashboard.sections.therapistsEmptyBody")}

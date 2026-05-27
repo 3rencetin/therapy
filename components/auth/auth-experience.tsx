@@ -5,7 +5,6 @@ import { useSearchParams } from "next/navigation";
 
 import { useI18n } from "@/components/i18n/i18n-provider";
 import { LanguageSwitcher } from "@/components/i18n/language-switcher";
-import { ThemeToggle } from "@/components/theme/theme-toggle";
 import type { AuthMode } from "./auth-mode-toggle";
 import { AuthBrandPanel } from "./auth-brand-panel";
 import { AuthGlassCard } from "./auth-glass-card";
@@ -34,7 +33,6 @@ export function AuthExperience() {
     <AuthShell>
       <div className="pointer-events-none absolute right-0 top-0 z-30 p-4 sm:p-6">
         <div className="pointer-events-auto flex flex-wrap items-center justify-end gap-2">
-          <ThemeToggle />
           <LanguageSwitcher />
         </div>
       </div>

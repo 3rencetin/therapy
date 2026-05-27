@@ -5,7 +5,6 @@ import Link from "next/link";
 import { AlertTriangle, ArrowLeft, Shield } from "lucide-react";
 
 import { LanguageSwitcher } from "@/components/i18n/language-switcher";
-import { ThemeToggle } from "@/components/theme/theme-toggle";
 import { useI18n } from "@/components/i18n/i18n-provider";
 import { siteConfig } from "@/config/site";
 import { cn } from "@/lib/utils";
@@ -71,7 +70,6 @@ export function TrustCenterContent() {
             </Link>
           </div>
           <div className="flex shrink-0 items-center gap-2">
-            <ThemeToggle />
             <LanguageSwitcher />
           </div>
         </div>

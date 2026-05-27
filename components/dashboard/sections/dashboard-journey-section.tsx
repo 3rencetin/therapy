@@ -44,7 +44,7 @@ export function DashboardJourneySection() {
   return (
     <section id="yolculuk" className="scroll-mt-24 space-y-5">
       <div className="space-y-2">
-        <p className="text-[0.72rem] tracking-[0.16em] text-muted-foreground/85 uppercase">
+        <p className="text-[0.72rem] font-semibold tracking-[0.16em] text-[#0070E8] uppercase">
           {t("dashboard.sections.journeyKicker")}
         </p>
         <h2 className="font-display text-2xl tracking-[-0.02em] sm:text-[1.65rem]">{t("dashboard.sections.journeyTitle")}</h2>

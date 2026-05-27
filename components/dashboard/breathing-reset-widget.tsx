@@ -35,12 +35,12 @@ export function BreathingResetWidget({ className }: { className?: string }) {
   return (
     <div
       className={cn(
-        "relative overflow-hidden rounded-[var(--radius-xl)] border border-border/45 bg-[color-mix(in_oklch,var(--color-card),transparent_10%)] p-7 shadow-[var(--shadow-glass)] backdrop-blur-[18px]",
+        "relative overflow-hidden surface-premium rounded-[var(--radius-xl)] p-7 backdrop-blur-[18px]",
         className,
       )}
     >
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(380px_circle_at_50%_0%,oklch(0.62_0.12_245/0.11),transparent_58%)] dark:bg-[radial-gradient(360px_circle_at_50%_0%,oklch(0.7_0.1_250/0.14),transparent_60%)]" />
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(120%_80%_at_50%_100%,oklch(0.55_0.06_270/0.05),transparent_70%)]" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(380px_circle_at_50%_0%,#007AFF20,transparent_58%)]" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(120%_80%_at_50%_100%,#5856D614,transparent_70%)]" />
 
       <div className="relative flex flex-col items-center text-center">
         <p className="text-[0.72rem] tracking-[0.16em] text-muted-foreground/90 uppercase">

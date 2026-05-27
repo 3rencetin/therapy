@@ -22,6 +22,7 @@ function requiresAuthentication(pathname: string): boolean {
     pathname.startsWith("/admin") ||
     pathname.startsWith("/therapist") ||
     pathname.startsWith("/onboarding") ||
+    pathname.startsWith("/join") ||
     pathname === "/hesap-engellendi"
   );
 }

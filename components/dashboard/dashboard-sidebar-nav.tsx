@@ -72,16 +72,16 @@ export function DashboardSidebarNav({
             href={item.href}
             onClick={onNavigate}
             className={cn(
-              "group flex items-center gap-3 rounded-xl px-3 py-2.5 text-[0.9rem] transition-colors duration-200",
+              "group flex items-center gap-3 rounded-[0.75rem] px-3 py-2.5 text-[0.875rem] font-medium tracking-[-0.01em] transition-all duration-300",
               active
-                ? "bg-white/[0.08] text-foreground shadow-[inset_0_1px_0_oklch(1_0_0/0.05)]"
-                : "text-muted-foreground hover:bg-white/[0.04] hover:text-foreground",
+                ? "bg-[#007AFF22] text-[#0070E8] shadow-[inset_0_0_0_1px_rgba(0,122,255,0.18)]"
+                : "text-muted-foreground hover:bg-[#007AFF10] hover:text-foreground",
             )}
           >
             <span
               className={cn(
-                "grid size-9 shrink-0 place-items-center rounded-lg border transition-colors duration-200",
-                active ? "border-white/15 bg-white/[0.06] text-foreground" : "border-border/55 bg-white/[0.02] text-muted-foreground group-hover:border-border",
+                "grid size-8 shrink-0 place-items-center rounded-lg transition-colors duration-300",
+                active ? "text-[#0070E8]" : "text-muted-foreground group-hover:text-foreground",
               )}
             >
               {item.icon}

@@ -4,14 +4,14 @@ import type { TherapistPreview } from "@/lib/data/therapist-previews";
 import { sanitizeTherapistLanguages } from "@/lib/therapist/profile-field-options";
 
 const ACCENT_CLASSES = [
-  "bg-gradient-to-br from-emerald-500/25 via-teal-500/10 to-cyan-950/30 ring-1 ring-white/10",
-  "bg-gradient-to-br from-indigo-500/22 via-violet-600/10 to-slate-950/35 ring-1 ring-white/10",
-  "bg-gradient-to-br from-amber-500/18 via-rose-500/10 to-orange-950/28 ring-1 ring-white/10",
-  "bg-gradient-to-br from-sky-500/20 via-blue-600/10 to-indigo-950/32 ring-1 ring-white/10",
-  "bg-gradient-to-br from-fuchsia-500/16 via-purple-600/10 to-pink-950/26 ring-1 ring-white/10",
-  "bg-gradient-to-br from-lime-500/15 via-emerald-600/10 to-green-950/28 ring-1 ring-white/10",
-  "bg-gradient-to-br from-rose-500/18 via-red-500/8 to-rose-950/30 ring-1 ring-white/10",
-  "bg-gradient-to-br from-cyan-500/20 via-blue-500/8 to-slate-900/35 ring-1 ring-white/10",
+  "bg-gradient-to-br from-[#007AFF] via-[#5856D6] to-[#AF52DE] ring-1 ring-[#007AFF33] text-white",
+  "bg-gradient-to-br from-[#5856D6] via-[#007AFF] to-[#5AC8FA] ring-1 ring-[#5856D633] text-white",
+  "bg-gradient-to-br from-[#007AFF] via-[#5AC8FA] to-[#34C759] ring-1 ring-[#007AFF33] text-white",
+  "bg-gradient-to-br from-[#AF52DE] via-[#5856D6] to-[#007AFF] ring-1 ring-[#AF52DE44] text-white",
+  "bg-gradient-to-br from-[#007AFF] to-[#5856D6] ring-1 ring-[#007AFF33] text-white",
+  "bg-gradient-to-br from-[#5856D6] to-[#AF52DE] ring-1 ring-[#5856D633] text-white",
+  "bg-gradient-to-br from-[#5AC8FA] via-[#007AFF] to-[#5856D6] ring-1 ring-[#5AC8FA44] text-white",
+  "bg-gradient-to-br from-[#007AFF] via-[#AF52DE] to-[#FF2D55] ring-1 ring-[#007AFF33] text-white",
 ] as const;
 
 function hashToAccent(profileId: string): string {

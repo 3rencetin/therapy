@@ -23,8 +23,8 @@ export function DiscoveryChip({
       className={cn(
         "rounded-full border px-3 py-1 text-[0.72rem] font-medium tracking-wide transition-colors duration-200 uppercase",
         active
-          ? "border-white/22 bg-white/[0.08] text-foreground shadow-[inset_0_1px_0_oklch(1_0_0/0.06)]"
-          : "border-border/55 bg-white/[0.02] text-muted-foreground hover:border-border hover:bg-white/[0.04] hover:text-foreground",
+          ? "border-[oklch(0.72_0.14_195/0.45)] bg-gradient-to-r from-[oklch(0.55_0.14_195/0.22)] to-[oklch(0.48_0.16_285/0.18)] text-foreground shadow-[0_4px_16px_-6px_oklch(0.45_0.14_195/0.4)]"
+          : "border-white/[0.08] bg-white/[0.03] text-muted-foreground hover:border-primary/25 hover:bg-white/[0.06] hover:text-foreground",
         className,
       )}
     >

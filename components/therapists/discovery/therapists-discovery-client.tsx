@@ -4,19 +4,17 @@ import { useMemo, useState } from "react";
 import { motion } from "framer-motion";
 
 import type { TherapistProfileRow } from "@/types/database";
-import { TherapistPremiumCard } from "@/components/dashboard/therapist-premium-card";
-import { onboardingListContainer, onboardingListItem } from "@/lib/animations";
+import { fadeUp } from "@/lib/animations";
 import {
   collectDiscoveryFacets,
   defaultTherapistDiscoveryFilters,
   filterTherapistProfiles,
   type TherapistDiscoveryFilters,
-  type TherapistLayoutMode,
 } from "@/lib/therapists/discovery-filters";
-import { cn } from "@/lib/utils";
 
 import { DiscoveryEmptyState } from "./discovery-empty-state";
 import { DiscoveryFilterBar } from "./discovery-filter-bar";
+import { TherapistMarketplaceCard } from "./therapist-marketplace-card";
 
 export function TherapistsDiscoveryClient({
   profiles,
@@ -28,10 +26,8 @@ export function TherapistsDiscoveryClient({
   openSlots: { profileId: string; startsAt: string }[];
 }) {
   const [filters, setFilters] = useState<TherapistDiscoveryFilters>(defaultTherapistDiscoveryFilters);
-  const [layoutMode, setLayoutMode] = useState<TherapistLayoutMode>("grid");
 
   const facets = useMemo(() => collectDiscoveryFacets(profiles), [profiles]);
-
   const openSet = useMemo(() => new Set(openProfileIds), [openProfileIds]);
 
   const filtered = useMemo(
@@ -79,12 +75,21 @@ export function TherapistsDiscoveryClient({
   const reset = () => setFilters(defaultTherapistDiscoveryFilters);
 
   return (
-    <div className="mx-auto max-w-6xl space-y-10 pb-20">
+    <div className="relative mx-auto max-w-6xl space-y-10 pb-24">
+      <motion.div
+        className="pointer-events-none absolute -left-20 top-0 size-72 rounded-full bg-[radial-gradient(circle,oklch(0.45_0.14_195/0.2),transparent_70%)] blur-3xl"
+        animate={{ opacity: [0.35, 0.55, 0.35], scale: [1, 1.06, 1] }}
+        transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+      />
+      <motion.div
+        className="pointer-events-none absolute -right-16 top-32 size-64 rounded-full bg-[radial-gradient(circle,oklch(0.4_0.16_285/0.18),transparent_70%)] blur-3xl"
+        animate={{ opacity: [0.25, 0.45, 0.25] }}
+        transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+      />
+
       <DiscoveryFilterBar
         query={filters.query}
         onQueryChange={(v) => setFilters((f) => ({ ...f, query: v }))}
-        layoutMode={layoutMode}
-        onLayoutModeChange={setLayoutMode}
         facets={facets}
         filters={filters}
         toggleSpecialty={toggleSpecialty}
@@ -100,25 +105,15 @@ export function TherapistsDiscoveryClient({
       {filtered.length === 0 ? (
         <DiscoveryEmptyState onReset={reset} />
       ) : (
-        <motion.div
-          key={layoutMode}
-          variants={onboardingListContainer}
-          initial="initial"
-          animate="animate"
-          className={cn(
-            "grid gap-4",
-            layoutMode === "grid" ? "sm:grid-cols-2 lg:grid-cols-3" : "grid-cols-1",
-          )}
-        >
+        <motion.div variants={fadeUp} initial="hidden" animate="show" className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
           {filtered.map((profile, idx) => (
-            <motion.div key={profile.profile_id} variants={onboardingListItem} layout>
-              <TherapistPremiumCard
-                profile={profile}
-                featured={idx === 0}
-                variant={layoutMode === "grid" ? "compact" : "hero"}
-                href={`/dashboard/therapists/${profile.profile_id}`}
-              />
-            </motion.div>
+            <TherapistMarketplaceCard
+              key={profile.profile_id}
+              profile={profile}
+              href={`/dashboard/therapists/${profile.profile_id}`}
+              hasOpenSlot={openSet.has(profile.profile_id)}
+              index={idx}
+            />
           ))}
         </motion.div>
       )}

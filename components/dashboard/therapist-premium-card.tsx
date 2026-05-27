@@ -31,13 +31,13 @@ export function TherapistPremiumCard({
       layout
       whileHover={{ y: -3, transition: softSpring }}
       className={cn(
-        "group relative overflow-hidden rounded-[var(--radius-xl)] border border-border/55 bg-[color-mix(in_oklch,var(--color-card),transparent_10%)] shadow-[var(--shadow-glass)] backdrop-blur-[var(--blur-glass)]",
-        featured && "border-white/[0.14] ring-1 ring-white/[0.06]",
+        "group relative overflow-hidden surface-premium rounded-[var(--radius-xl)]",
+        featured && "border-[#007AFF44] ring-1 ring-[#007AFF22]",
         variant === "hero" ? "p-6 sm:p-7" : "p-5",
         href && "transition-[box-shadow,transform] duration-300",
       )}
     >
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(480px_circle_at_var(--rx,20%)_-10%,oklch(0.9_0.03_95/0.07),transparent_55%)] opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(480px_circle_at_var(--rx,20%)_-10%,#007AFF18,transparent_55%)] opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
       <div
         className={cn(
           "relative flex gap-5",
@@ -72,11 +72,11 @@ export function TherapistPremiumCard({
               </p>
             </div>
             <div className="flex items-center gap-3 text-[0.8125rem] text-muted-foreground">
-              <span className="inline-flex items-center gap-1 rounded-lg border border-border/50 bg-white/[0.04] px-2 py-1 text-foreground/90">
+              <span className="inline-flex items-center gap-1 rounded-lg border border-border bg-muted px-2 py-1 text-foreground/90">
                 <Star className="size-3.5 text-amber-200/80" strokeWidth={1.5} />
                 {displayRating}
               </span>
-              <span className="rounded-lg border border-border/50 bg-white/[0.03] px-2 py-1">
+              <span className="rounded-lg border border-border bg-muted px-2 py-1">
                 {profile.years_of_experience} yıl
               </span>
             </div>
@@ -88,7 +88,7 @@ export function TherapistPremiumCard({
             {preview.specialties.slice(0, 4).map((s) => (
               <span
                 key={s}
-                className="rounded-md border border-border/45 bg-white/[0.03] px-2 py-0.5 text-[0.68rem] text-muted-foreground"
+                className="rounded-md border border-border bg-muted px-2 py-0.5 text-[0.68rem] text-muted-foreground"
               >
                 {s}
               </span>
@@ -104,7 +104,7 @@ export function TherapistPremiumCard({
               {preview.availability.map((slot) => (
                 <span
                   key={slot}
-                  className="rounded-full border border-white/[0.08] bg-white/[0.04] px-2.5 py-0.5 text-[0.68rem] text-muted-foreground/90"
+                  className="rounded-full border border-border bg-muted px-2.5 py-0.5 text-[0.68rem] text-muted-foreground"
                 >
                   {slot}
                 </span>

@@ -5,17 +5,17 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-[transform,box-shadow,background-color,color,opacity] duration-200 disabled:pointer-events-none disabled:opacity-45 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 active:translate-y-px",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-xl text-sm font-semibold tracking-[-0.01em] transition-[transform,box-shadow,background-color,color,opacity] duration-300 disabled:pointer-events-none disabled:opacity-45 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 active:scale-[0.98]",
   {
     variants: {
       variant: {
         default:
-          "bg-primary text-primary-foreground shadow-[0_1px_0_oklch(1_0_0/0.06)_inset] hover:bg-primary/92 focus-visible:ring-2 focus-visible:ring-ring/80",
+          "bg-primary text-primary-foreground shadow-[var(--shadow-premium)] hover:brightness-[1.03] focus-visible:ring-2 focus-visible:ring-ring/50",
         outline:
-          "border border-border/80 bg-transparent text-foreground shadow-none hover:bg-white/[0.035] focus-visible:ring-2 focus-visible:ring-ring/70",
-        ghost: "bg-transparent text-foreground hover:bg-white/[0.04] focus-visible:ring-2 focus-visible:ring-ring/60",
+          "border border-border bg-card/80 text-foreground shadow-[0_1px_2px_rgba(0,0,0,0.04)] backdrop-blur-sm hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring/40",
+        ghost: "bg-transparent text-foreground hover:bg-black/[0.04] focus-visible:ring-2 focus-visible:ring-ring/35",
         subtle:
-          "bg-white/[0.04] text-foreground hover:bg-white/[0.06] focus-visible:ring-2 focus-visible:ring-ring/60",
+          "bg-muted text-foreground shadow-[0_1px_2px_rgba(0,0,0,0.03)] hover:bg-card focus-visible:ring-2 focus-visible:ring-ring/35",
       },
       size: {
         default: "h-11 px-5",

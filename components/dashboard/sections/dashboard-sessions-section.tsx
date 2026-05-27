@@ -17,7 +17,7 @@ export function DashboardSessionsSection() {
       initial="hidden"
       whileInView="show"
       viewport={{ once: true, margin: "-12%" }}
-      className="scroll-mt-24 rounded-[var(--radius-xl)] border border-border/50 bg-white/[0.025] p-7 shadow-[var(--shadow-glass)] backdrop-blur-[14px]"
+      className="scroll-mt-24 surface-premium rounded-[var(--radius-xl)] p-7 backdrop-blur-[14px]"
     >
       <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex gap-4">
@@ -25,7 +25,7 @@ export function DashboardSessionsSection() {
             <CalendarClock className="size-6 stroke-[1.4]" />
           </span>
           <div className="space-y-1.5">
-            <p className="text-[0.72rem] tracking-[0.16em] text-muted-foreground/85 uppercase">
+            <p className="text-[0.72rem] font-semibold tracking-[0.16em] text-[#0070E8] uppercase">
               {t("dashboard.sessionsSection.kicker")}
             </p>
             <h2 className="font-display text-xl tracking-[-0.02em] sm:text-2xl">

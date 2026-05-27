@@ -3,9 +3,16 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ArrowLeft, Clock } from "lucide-react";
+import { ArrowLeft, Camera, CameraOff, Clock, Mic, MicOff } from "lucide-react";
 import "@livekit/components-styles";
-import { LiveKitRoom, RoomAudioRenderer, VideoConference, useChat, useRoomContext } from "@livekit/components-react";
+import {
+  LiveKitRoom,
+  RoomAudioRenderer,
+  VideoConference,
+  useChat,
+  useParticipants,
+  useRoomContext,
+} from "@livekit/components-react";
 import { ConnectionState, RoomEvent, type Participant } from "livekit-client";
 
 import { useI18n } from "@/components/i18n/i18n-provider";
@@ -13,7 +20,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { extendSessionVideoAction } from "@/lib/actions/extend-session-video-action";
 import { getSessionVideoTimingAction } from "@/lib/actions/session-video-timing-action";
-import { issueSessionVideoToken } from "@/lib/actions/session-video-token-action";
+import { issueVideoCallToken, type VideoCallTokenRequest } from "@/lib/actions/video-call-token-action";
 import { getSessionVideoEffectiveEndMs, VIDEO_WRAPUP_WARN_MS } from "@/lib/video/join-window";
 import type { SessionVideoCallPageTiming } from "@/lib/video/load-session-video-call";
 import { playParticipantJoinChime } from "@/lib/video/play-participant-join-chime";
@@ -23,11 +30,17 @@ const TOKEN_ERR_MAP: Record<string, string> = {
   LIVEKIT_NOT_CONFIGURED: "sessions.video.errLivekit",
   UNAUTHORIZED: "sessions.video.errUnauthorized",
   SESSION_NOT_FOUND: "sessions.video.errNotFound",
+  THERAPIST_NOT_FOUND: "sessions.video.errNotFound",
   FORBIDDEN: "sessions.video.errForbidden",
   SESSION_CANCELLED: "sessions.video.errCancelled",
   SESSION_NOT_JOINABLE: "sessions.video.errNotJoinable",
   SESSION_ENDED: "sessions.video.errEnded",
   SESSION_TOO_EARLY: "sessions.video.errTooEarly",
+  OTHER_SESSION_ACTIVE: "sessions.video.errOtherSessionActive",
+  INVITE_NOT_FOUND: "sessions.video.errInviteNotFound",
+  INVITE_EXPIRED: "sessions.video.errInviteExpired",
+  INVITE_USED: "sessions.video.errInviteUsed",
+  INVITE_WRONG_USER: "sessions.video.errInviteWrongUser",
 };
 
 const EXTEND_ERR_MAP: Record<string, string> = {
@@ -73,7 +86,15 @@ function SessionRemainingCountdown({
   );
 }
 
-function CallChrome({ backHref, countdown }: { backHref: string; countdown: ReactNode }) {
+function CallChrome({
+  backHref,
+  countdown,
+  title,
+}: {
+  backHref: string;
+  countdown: ReactNode;
+  title: string;
+}) {
   const { t } = useI18n();
   const room = useRoomContext();
   const router = useRouter();
@@ -86,9 +107,7 @@ function CallChrome({ backHref, countdown }: { backHref: string; countdown: Reac
   return (
     <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border/40 bg-background/90 px-4 py-3 backdrop-blur-md">
       <div className="min-w-0 flex-1">
-        <p className="truncate text-[0.72rem] font-medium tracking-wide text-muted-foreground uppercase">
-          {t("sessions.video.roomTitle")}
-        </p>
+        <p className="truncate text-[0.72rem] font-medium tracking-wide text-muted-foreground uppercase">{title}</p>
       </div>
       <div className="order-3 flex w-full justify-center sm:order-none sm:w-auto sm:justify-end">{countdown}</div>
       <Button type="button" variant="outline" size="sm" className="order-2 shrink-0 rounded-xl sm:order-none" onClick={leave}>
@@ -242,6 +261,122 @@ function VideoSessionLifecycle({
   );
 }
 
+function VideoConferenceStage({ children }: { children?: ReactNode }) {
+  return (
+    <div
+      className="terapi-video-room relative h-full min-h-0 w-full flex-1"
+      data-lk-theme="default"
+    >
+      {children}
+      <VideoConference />
+      <MediaQuickControls />
+    </div>
+  );
+}
+
+function MediaQuickControls() {
+  const room = useRoomContext();
+  const [busy, setBusy] = useState<"mic" | "cam" | null>(null);
+  const [, bump] = useState(0);
+  const canPublish = room.localParticipant.permissions?.canPublish ?? true;
+
+  useEffect(() => {
+    const sync = () => bump((n) => n + 1);
+    room.on(RoomEvent.LocalTrackPublished, sync);
+    room.on(RoomEvent.LocalTrackUnpublished, sync);
+    room.on(RoomEvent.TrackMuted, sync);
+    room.on(RoomEvent.TrackUnmuted, sync);
+    return () => {
+      room.off(RoomEvent.LocalTrackPublished, sync);
+      room.off(RoomEvent.LocalTrackUnpublished, sync);
+      room.off(RoomEvent.TrackMuted, sync);
+      room.off(RoomEvent.TrackUnmuted, sync);
+    };
+  }, [room]);
+
+  if (!canPublish) return null;
+
+  const micOn = room.localParticipant.isMicrophoneEnabled;
+  const camOn = room.localParticipant.isCameraEnabled;
+
+  async function toggleMic() {
+    setBusy("mic");
+    try {
+      await room.localParticipant.setMicrophoneEnabled(!micOn);
+    } finally {
+      setBusy(null);
+    }
+  }
+
+  async function toggleCam() {
+    setBusy("cam");
+    try {
+      await room.localParticipant.setCameraEnabled(!camOn);
+    } finally {
+      setBusy(null);
+    }
+  }
+
+  return (
+    <div className="pointer-events-none absolute right-4 bottom-[4.6rem] z-[9] flex items-center gap-2">
+      <button
+        type="button"
+        className="pointer-events-auto inline-flex size-10 items-center justify-center rounded-full border border-white/20 bg-black/55 text-white shadow-lg backdrop-blur-md transition hover:bg-black/70 disabled:opacity-60"
+        onClick={() => void toggleMic()}
+        disabled={busy != null}
+        aria-label={micOn ? "Mikrofonu kapat" : "Mikrofonu ac"}
+        title={micOn ? "Mikrofon acik" : "Mikrofon kapali"}
+      >
+        {micOn ? <Mic className="size-4.5" /> : <MicOff className="size-4.5 text-rose-300" />}
+      </button>
+      <button
+        type="button"
+        className="pointer-events-auto inline-flex size-10 items-center justify-center rounded-full border border-white/20 bg-black/55 text-white shadow-lg backdrop-blur-md transition hover:bg-black/70 disabled:opacity-60"
+        onClick={() => void toggleCam()}
+        disabled={busy != null}
+        aria-label={camOn ? "Kamerayi kapat" : "Kamerayi ac"}
+        title={camOn ? "Kamera acik" : "Kamera kapali"}
+      >
+        {camOn ? <Camera className="size-4.5" /> : <CameraOff className="size-4.5 text-rose-300" />}
+      </button>
+    </div>
+  );
+}
+
+function SoloRoomHint() {
+  const { t } = useI18n();
+  const room = useRoomContext();
+  const participants = useParticipants();
+  const [, bump] = useState(0);
+
+  useEffect(() => {
+    const bumpState = () => bump((n) => n + 1);
+    room.on(RoomEvent.LocalTrackPublished, bumpState);
+    room.on(RoomEvent.LocalTrackUnpublished, bumpState);
+    room.on(RoomEvent.TrackMuted, bumpState);
+    room.on(RoomEvent.TrackUnmuted, bumpState);
+    return () => {
+      room.off(RoomEvent.LocalTrackPublished, bumpState);
+      room.off(RoomEvent.LocalTrackUnpublished, bumpState);
+      room.off(RoomEvent.TrackMuted, bumpState);
+      room.off(RoomEvent.TrackUnmuted, bumpState);
+    };
+  }, [room]);
+
+  const remoteCount = participants.filter((p) => !p.isLocal).length;
+  const camOn = room.localParticipant.isCameraEnabled;
+
+  if (remoteCount > 0) return null;
+
+  return (
+    <div className="pointer-events-none absolute inset-0 z-[6] flex items-center justify-center p-6">
+      <p className="max-w-md text-center text-[0.95rem] leading-relaxed text-white/85">
+        {!camOn ? t("sessions.video.enableCameraHint") : t("sessions.video.waitingForGuest")}
+      </p>
+    </div>
+  );
+}
+
 function ParticipantJoinChatAndChime() {
   const { t } = useI18n();
   const room = useRoomContext();
@@ -309,6 +444,8 @@ function RoomSessionBody({
   setVideoExtendedUntil,
   isTherapist,
   setCredentials,
+  headerTitle,
+  tokenSource,
 }: {
   sessionId: string;
   backHref: string;
@@ -317,6 +454,8 @@ function RoomSessionBody({
   setVideoExtendedUntil: (v: string | null) => void;
   isTherapist: boolean;
   setCredentials: (url: string, token: string) => void;
+  headerTitle: string;
+  tokenSource: VideoCallTokenRequest;
 }) {
   const room = useRoomContext();
   const pendingMediaRestoreRef = useRef<{ mic: boolean; cam: boolean } | null>(null);
@@ -331,14 +470,14 @@ function RoomSessionBody({
       mic: room.localParticipant.isMicrophoneEnabled,
       cam: room.localParticipant.isCameraEnabled,
     };
-    const res = await issueSessionVideoToken(sessionId);
+    const res = await issueVideoCallToken(tokenSource);
     if (!res.ok) {
       pendingMediaRestoreRef.current = null;
       return;
     }
     await room.disconnect();
     setCredentials(res.url, res.token);
-  }, [room, sessionId, setCredentials]);
+  }, [room, tokenSource, setCredentials]);
 
   useEffect(() => {
     const onConnected = () => {
@@ -381,10 +520,11 @@ function RoomSessionBody({
     <>
       <CallChrome
         backHref={backHref}
+        title={headerTitle}
         countdown={<SessionRemainingCountdown endsAt={endsAt} videoExtendedUntil={videoExtendedUntil} />}
       />
       <ParticipantJoinChatAndChime />
-      <div className="relative min-h-0 flex-1 overflow-hidden bg-black/90 [&_.lk-video-conference]:h-full [&_.lk-video-conference]:min-h-[320px]">
+      <div className="relative flex min-h-0 flex-1 flex-col overflow-hidden bg-[#111]">
         <div className="pointer-events-none absolute inset-0 z-[5]">
           <VideoSessionLifecycle
             endsAt={endsAt}
@@ -396,36 +536,66 @@ function RoomSessionBody({
             onNeedTokenRefresh={refreshAccessTokenPreservingMedia}
           />
         </div>
-        <VideoConference />
+        <VideoConferenceStage>
+          <SoloRoomHint />
+        </VideoConferenceStage>
       </div>
       <RoomAudioRenderer />
     </>
   );
 }
 
-export function SessionVideoCallClient({
-  sessionId,
+function RoomOfficeBody({
   backHref,
-  initialTiming,
-  isTherapist,
+  headerTitle,
 }: {
-  sessionId: string;
   backHref: string;
-  initialTiming: SessionVideoCallPageTiming;
-  isTherapist: boolean;
+  headerTitle: string;
 }) {
+  return (
+    <>
+      <CallChrome backHref={backHref} title={headerTitle} countdown={null} />
+      <ParticipantJoinChatAndChime />
+      <div className="relative flex min-h-0 flex-1 flex-col overflow-hidden bg-[#111]">
+        <VideoConferenceStage>
+          <SoloRoomHint />
+        </VideoConferenceStage>
+      </div>
+      <RoomAudioRenderer />
+    </>
+  );
+}
+
+export type VideoCallClientProps = {
+  tokenSource: VideoCallTokenRequest;
+  backHref: string;
+  headerTitleKey?: string;
+  /** Seans görüşmesi: geri sayım ve uzatma */
+  sessionMode?: {
+    sessionId: string;
+    initialTiming: SessionVideoCallPageTiming;
+    isTherapist: boolean;
+  };
+};
+
+export function SessionVideoCallClient({ tokenSource, backHref, headerTitleKey, sessionMode }: VideoCallClientProps) {
   const { t } = useI18n();
+  const headerTitle = headerTitleKey ? t(headerTitleKey) : t("sessions.video.roomTitle");
   const [url, setUrl] = useState<string | undefined>();
   const [token, setToken] = useState<string | undefined>();
   const [error, setError] = useState<string | null>(null);
   const [failCode, setFailCode] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
-  const [videoExtendedUntil, setVideoExtendedUntil] = useState<string | null>(initialTiming.videoExtendedUntil);
+  const [videoExtendedUntil, setVideoExtendedUntil] = useState<string | null>(
+    sessionMode?.initialTiming.videoExtendedUntil ?? null,
+  );
 
   const setCredentials = useCallback((nextUrl: string, nextToken: string) => {
     setUrl(nextUrl);
     setToken(nextToken);
   }, []);
+
+  const tokenKey = JSON.stringify(tokenSource);
 
   useEffect(() => {
     let cancelled = false;
@@ -433,7 +603,7 @@ export function SessionVideoCallClient({
       setLoading(true);
       setError(null);
       setFailCode(null);
-      const res = await issueSessionVideoToken(sessionId);
+      const res = await issueVideoCallToken(tokenSource);
       if (cancelled) return;
       if (res.ok) {
         setUrl(res.url);
@@ -450,8 +620,8 @@ export function SessionVideoCallClient({
     return () => {
       cancelled = true;
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- t sözlüğü locale ile birlikte; yalnızca sessionId değişiminde token al
-  }, [sessionId]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tokenKey]);
 
   if (loading) {
     return (
@@ -465,7 +635,7 @@ export function SessionVideoCallClient({
     return (
       <div className="mx-auto max-w-lg space-y-4 px-4 py-10">
         <p className="font-display text-lg">
-          {failCode === "LIVEKIT_NOT_CONFIGURED" ? t("sessions.video.configTitle") : t("sessions.video.roomTitle")}
+          {failCode === "LIVEKIT_NOT_CONFIGURED" ? t("sessions.video.configTitle") : headerTitle}
         </p>
         <p className="text-[0.9rem] leading-relaxed text-muted-foreground">{error ?? t("sessions.video.errGeneric")}</p>
         {failCode === "LIVEKIT_NOT_CONFIGURED" ? (
@@ -482,8 +652,8 @@ export function SessionVideoCallClient({
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex flex-col bg-background">
-      <div className="relative z-10 flex min-h-0 flex-1 flex-col">
+    <div className="fixed inset-0 z-[100] flex h-dvh flex-col bg-[#111]">
+      <div className="relative flex h-full min-h-0 flex-1 flex-col">
         <LiveKitRoom
           serverUrl={url}
           token={token}
@@ -491,17 +661,23 @@ export function SessionVideoCallClient({
           audio={false}
           video={false}
           onDisconnected={() => {}}
-          className="flex min-h-0 flex-1 flex-col"
+          className="flex h-full min-h-0 flex-1 flex-col"
         >
-          <RoomSessionBody
-            sessionId={sessionId}
-            backHref={backHref}
-            endsAt={initialTiming.endsAt}
-            videoExtendedUntil={videoExtendedUntil}
-            setVideoExtendedUntil={setVideoExtendedUntil}
-            isTherapist={isTherapist}
-            setCredentials={setCredentials}
-          />
+          {sessionMode ? (
+            <RoomSessionBody
+              sessionId={sessionMode.sessionId}
+              backHref={backHref}
+              endsAt={sessionMode.initialTiming.endsAt}
+              videoExtendedUntil={videoExtendedUntil}
+              setVideoExtendedUntil={setVideoExtendedUntil}
+              isTherapist={sessionMode.isTherapist}
+              setCredentials={setCredentials}
+              headerTitle={headerTitle}
+              tokenSource={tokenSource}
+            />
+          ) : (
+            <RoomOfficeBody backHref={backHref} headerTitle={headerTitle} />
+          )}
         </LiveKitRoom>
       </div>
     </div>

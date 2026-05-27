@@ -1,6 +1,5 @@
 "use client";
 
-import type { ActivityEntry } from "@/lib/dashboard/activity-timeline";
 import type { DashboardBootstrap } from "@/lib/dashboard/load-dashboard-data";
 import { moodSnapshotForUser } from "@/lib/dashboard/mood-snapshot";
 import {
@@ -11,7 +10,6 @@ import {
 import { useI18n } from "@/components/i18n/i18n-provider";
 
 import { BreathingResetWidget } from "./breathing-reset-widget";
-import { DashboardActivitySection } from "./sections/dashboard-activity-section";
 import { DashboardJourneySection } from "./sections/dashboard-journey-section";
 import { DashboardMoodSection } from "./sections/dashboard-mood-section";
 import { DashboardPrivacySection } from "./sections/dashboard-privacy-section";
@@ -24,12 +22,10 @@ export function DashboardHome({
   displayName,
   userId,
   bootstrap,
-  activity,
 }: {
   displayName: string;
   userId: string;
   bootstrap: DashboardBootstrap;
-  activity: ActivityEntry[];
 }) {
   const { t } = useI18n();
   const welcomeSubtitle = buildWelcomeSubtitle(bootstrap.wizard, t);
@@ -37,7 +33,7 @@ export function DashboardHome({
   const moods = moodSnapshotForUser(userId);
 
   return (
-    <div className="mx-auto max-w-6xl space-y-12 pb-16">
+    <div className="mx-auto max-w-6xl space-y-14 pb-20">
       <DashboardWelcomeSection displayName={displayName} subtitle={welcomeSubtitle} />
 
       <div className="grid gap-10 xl:grid-cols-[minmax(0,1fr)_minmax(18rem,22rem)] xl:items-start xl:gap-12">
@@ -49,14 +45,12 @@ export function DashboardHome({
           <DashboardSessionsSection />
           <DashboardJourneySection />
         </div>
-        <aside className="space-y-8 xl:sticky xl:top-[4.5rem]">
+        <aside className="space-y-8 xl:sticky xl:top-20">
           <BreathingResetWidget />
           <DashboardMoodSection snapshots={moods} />
           <DashboardWellnessInsightSection text={insight} />
         </aside>
       </div>
-
-      <DashboardActivitySection entries={activity} />
 
       <DashboardPrivacySection />
     </div>
