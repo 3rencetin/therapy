@@ -296,6 +296,7 @@ export const trMessages = {
       yearsExp: "{years} yıl deneyim",
       onlineNow: "Müsait slot var",
       bookToSeePrice: "Randevu ile",
+      sessionFee: "{fee} TL",
       viewProfile: "Profil",
       bookCta: "Randevu Al",
     },

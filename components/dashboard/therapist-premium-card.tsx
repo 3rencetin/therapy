@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ShieldCheck, Star } from "lucide-react";
+import { Coins, ShieldCheck, Star, Timer } from "lucide-react";
 import Link from "next/link";
 import type { ReactNode } from "react";
 
@@ -25,6 +25,8 @@ export function TherapistPremiumCard({
   const preview = therapistRowToPreview(profile, gender);
   const rating = Number(profile.rating);
   const displayRating = Number.isFinite(rating) ? rating.toFixed(1) : "—";
+  const sessionMinutes = Math.max(15, Math.floor(profile.session_duration_minutes || 50));
+  const sessionFeeTry = Math.max(0, Math.floor(profile.session_fee_try || 0));
 
   const body: ReactNode = (
     <motion.article
@@ -46,12 +48,17 @@ export function TherapistPremiumCard({
       >
         <div
           className={cn(
-            "flex shrink-0 items-center justify-center rounded-2xl font-display text-xl tracking-tight text-white/90",
+            "flex shrink-0 items-center justify-center overflow-hidden rounded-2xl font-display text-xl tracking-tight text-white/90",
             preview.accentClass,
             variant === "hero" ? "size-[5.25rem] sm:size-[5.75rem]" : "size-[4.5rem]",
           )}
         >
-          {preview.initials}
+          {profile.avatar_url ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={profile.avatar_url} alt={profile.full_name} className="h-full w-full object-cover" />
+          ) : (
+            preview.initials
+          )}
         </div>
         <div className="min-w-0 flex-1 space-y-3">
           <div className="flex flex-wrap items-start justify-between gap-3">
@@ -61,7 +68,7 @@ export function TherapistPremiumCard({
                   {profile.full_name}
                 </h3>
                 {profile.verified ? (
-                  <span className="inline-flex items-center gap-1 rounded-md border border-emerald-500/25 bg-emerald-500/10 px-2 py-0.5 text-[0.65rem] font-medium tracking-wide text-emerald-200/90 uppercase">
+                  <span className="inline-flex items-center gap-1 rounded-md border border-emerald-500/30 bg-emerald-500/14 px-2 py-0.5 text-[0.65rem] font-semibold tracking-wide text-emerald-700 uppercase">
                     <ShieldCheck className="size-3" strokeWidth={2} />
                     Doğrulandı
                   </span>
@@ -110,6 +117,22 @@ export function TherapistPremiumCard({
                 </span>
               ))}
             </div>
+          </div>
+          <div className="flex flex-wrap items-center gap-2 pt-1">
+            <motion.span
+              whileHover={{ scale: 1.05, y: -1 }}
+              className="inline-flex items-center gap-1.5 rounded-full border border-[#007AFF30] bg-[linear-gradient(135deg,#007AFF1F,#5AC8FA26)] px-3 py-1 text-[0.74rem] font-semibold text-[#0A4B97] shadow-[0_8px_20px_-12px_rgba(0,122,255,0.45)]"
+            >
+              <Timer className="size-3.5" />
+              Seans {sessionMinutes} dk
+            </motion.span>
+            <motion.span
+              whileHover={{ scale: 1.05, y: -1 }}
+              className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-[linear-gradient(135deg,rgba(52,199,89,0.14),rgba(16,185,129,0.2))] px-3 py-1 text-[0.74rem] font-semibold text-emerald-700 shadow-[0_8px_20px_-12px_rgba(16,185,129,0.45)]"
+            >
+              <Coins className="size-3.5" />
+              {sessionFeeTry > 0 ? `${sessionFeeTry.toLocaleString("tr-TR")} TL / seans` : "Randevu ile fiyat"}
+            </motion.span>
           </div>
         </div>
       </div>

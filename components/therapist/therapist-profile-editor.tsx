@@ -1,10 +1,13 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState, useTransition } from "react";
+import { useRef, useState, useTransition } from "react";
 
 import type { TherapistProfileRow } from "@/types/database";
-import { therapistUpdatePublicProfileAction } from "@/lib/actions/therapist-workspace-actions";
+import {
+  therapistUpdatePublicProfileAction,
+  therapistUploadAvatarAction,
+} from "@/lib/actions/therapist-workspace-actions";
 import {
   THERAPIST_AVAILABILITY_TAG_OPTIONS,
   THERAPIST_LANGUAGE_OPTIONS,
@@ -18,6 +21,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
+import { Upload } from "lucide-react";
 
 function ToggleChipGroup({
   legend,
@@ -65,7 +69,10 @@ function ToggleChipGroup({
 export function TherapistProfileEditor({ profile }: { profile: TherapistProfileRow }) {
   const router = useRouter();
   const [pending, start] = useTransition();
+  const [avatarUploading, startAvatarUpload] = useTransition();
+  const fileRef = useRef<HTMLInputElement>(null);
   const [fullName, setFullName] = useState(profile.full_name);
+  const [avatarUrl, setAvatarUrl] = useState(profile.avatar_url ?? "");
   const [title, setTitle] = useState(profile.professional_title ?? "");
   const [bio, setBio] = useState(profile.bio);
   const [gender, setGender] = useState<"male" | "female">(
@@ -75,6 +82,8 @@ export function TherapistProfileEditor({ profile }: { profile: TherapistProfileR
   const [specs, setSpecs] = useState(() => initialSelectionFromStored(profile.specialization, "spec"));
   const [avails, setAvails] = useState(() => initialSelectionFromStored(profile.availability, "avail"));
   const [years, setYears] = useState(String(profile.years_of_experience ?? 0));
+  const [sessionMinutes, setSessionMinutes] = useState(String(profile.session_duration_minutes ?? 50));
+  const [sessionFeeTry, setSessionFeeTry] = useState(String(profile.session_fee_try ?? 0));
   const [feedback, setFeedback] = useState<{ variant: "ok" | "err"; text: string } | null>(null);
 
   return (
@@ -85,18 +94,23 @@ export function TherapistProfileEditor({ profile }: { profile: TherapistProfileR
         setFeedback(null);
         start(async () => {
           const y = Math.floor(Number.parseInt(years, 10));
+          const mins = Math.floor(Number.parseInt(sessionMinutes, 10));
+          const fee = Math.floor(Number.parseInt(sessionFeeTry, 10));
           const langArr = sanitizeTherapistLanguages(Array.from(langs), 12);
           const specArr = sanitizeTherapistSpecialization(Array.from(specs), 12);
           const availArr = sanitizeTherapistAvailabilityTags(Array.from(avails), 8);
           const res = await therapistUpdatePublicProfileAction({
             full_name: fullName,
             professional_title: title.trim() ? title.trim() : null,
+            avatar_url: avatarUrl.trim() ? avatarUrl.trim() : null,
             bio,
             gender,
             languages: langArr,
             specialization: specArr,
             availability: availArr,
             years_of_experience: Number.isFinite(y) ? y : 0,
+            session_duration_minutes: Number.isFinite(mins) ? mins : 50,
+            session_fee_try: Number.isFinite(fee) ? fee : 0,
           });
           if (!res.ok) {
             setFeedback({ variant: "err", text: res.message });
@@ -111,6 +125,54 @@ export function TherapistProfileEditor({ profile }: { profile: TherapistProfileR
       }}
     >
       <div className="grid gap-5 sm:grid-cols-2">
+        <div className="space-y-2 sm:col-span-2">
+          <Label className="text-[0.72rem] uppercase tracking-[0.12em] text-muted-foreground">Profil fotoğrafı</Label>
+          <div className="flex items-center gap-4">
+            <div className="size-16 overflow-hidden rounded-2xl border border-border/60 bg-background/30">
+              {avatarUrl ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={avatarUrl} alt="Profil fotoğrafı" className="h-full w-full object-cover" />
+              ) : (
+                <div className="grid h-full w-full place-items-center text-[0.72rem] text-muted-foreground">Yok</div>
+              )}
+            </div>
+            <div className="flex flex-wrap items-center gap-2">
+              <input
+                ref={fileRef}
+                type="file"
+                accept="image/jpeg,image/png,image/webp,image/gif"
+                className="hidden"
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  if (!file) return;
+                  setFeedback(null);
+                  startAvatarUpload(async () => {
+                    const fd = new FormData();
+                    fd.set("file", file);
+                    const res = await therapistUploadAvatarAction(fd);
+                    if (!res.ok) {
+                      setFeedback({ variant: "err", text: res.message });
+                      return;
+                    }
+                    setAvatarUrl(res.url);
+                    setFeedback({ variant: "ok", text: "Profil fotoğrafı yüklendi." });
+                  });
+                  e.target.value = "";
+                }}
+              />
+              <Button type="button" variant="outline" className="rounded-xl" onClick={() => fileRef.current?.click()} disabled={avatarUploading}>
+                <Upload className="size-4" />
+                {avatarUploading ? "Yükleniyor…" : "Fotoğraf yükle"}
+              </Button>
+              <Input
+                value={avatarUrl}
+                onChange={(e) => setAvatarUrl(e.target.value)}
+                placeholder="https://..."
+                className="min-w-[220px] rounded-xl bg-background/30"
+              />
+            </div>
+          </div>
+        </div>
         <div className="space-y-2 sm:col-span-2">
           <Label htmlFor="tp-name" className="text-[0.72rem] uppercase tracking-[0.12em] text-muted-foreground">
             Görünen ad
@@ -206,6 +268,34 @@ export function TherapistProfileEditor({ profile }: { profile: TherapistProfileR
             max={80}
             value={years}
             onChange={(e) => setYears(e.target.value)}
+            className="rounded-xl bg-background/30"
+          />
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="tp-session-minutes" className="text-[0.72rem] uppercase tracking-[0.12em] text-muted-foreground">
+            Seans süresi (dk)
+          </Label>
+          <Input
+            id="tp-session-minutes"
+            type="number"
+            min={15}
+            max={180}
+            value={sessionMinutes}
+            onChange={(e) => setSessionMinutes(e.target.value)}
+            className="rounded-xl bg-background/30"
+          />
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="tp-session-fee" className="text-[0.72rem] uppercase tracking-[0.12em] text-muted-foreground">
+            Seans ücreti (TL)
+          </Label>
+          <Input
+            id="tp-session-fee"
+            type="number"
+            min={0}
+            step={50}
+            value={sessionFeeTry}
+            onChange={(e) => setSessionFeeTry(e.target.value)}
             className="rounded-xl bg-background/30"
           />
         </div>

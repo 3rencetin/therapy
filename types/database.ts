@@ -289,6 +289,7 @@ export type Database = {
           user_id: string | null;
           full_name: string;
           professional_title: string | null;
+          avatar_url: string | null;
           gender: string;
           specialization: string[];
           languages: string[];
@@ -296,6 +297,8 @@ export type Database = {
           bio: string;
           rating: number;
           years_of_experience: number;
+          session_duration_minutes: number;
+          session_fee_try: number;
           verified: boolean;
           active: boolean;
           created_at: string;
@@ -306,6 +309,7 @@ export type Database = {
           user_id?: string | null;
           full_name: string;
           professional_title?: string | null;
+          avatar_url?: string | null;
           gender: string;
           specialization?: string[];
           languages?: string[];
@@ -313,6 +317,8 @@ export type Database = {
           bio?: string;
           rating?: number;
           years_of_experience?: number;
+          session_duration_minutes?: number;
+          session_fee_try?: number;
           verified?: boolean;
           active?: boolean;
           created_at?: string;
@@ -323,6 +329,7 @@ export type Database = {
           user_id?: string | null;
           full_name?: string;
           professional_title?: string | null;
+          avatar_url?: string | null;
           gender?: string;
           specialization?: string[];
           languages?: string[];
@@ -330,6 +337,8 @@ export type Database = {
           bio?: string;
           rating?: number;
           years_of_experience?: number;
+          session_duration_minutes?: number;
+          session_fee_try?: number;
           verified?: boolean;
           active?: boolean;
           created_at?: string;

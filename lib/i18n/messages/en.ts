@@ -291,6 +291,7 @@ export const enMessages: AppMessages = {
       yearsExp: "{years} yrs experience",
       onlineNow: "Has open slots",
       bookToSeePrice: "Book to schedule",
+      sessionFee: "{fee} TRY",
       viewProfile: "Profile",
       bookCta: "Book",
     },

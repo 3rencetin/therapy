@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 
 import { requireRole } from "@/lib/auth/require-session";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { createSupabaseServiceClient } from "@/lib/supabase/service";
 import { fetchTherapistProfileByUserId } from "@/lib/supabase/therapist-repository";
 import {
   sanitizeTherapistAvailabilityTags,
@@ -15,12 +16,15 @@ import { generateAvailabilitySlots, iterateYmdInclusive } from "@/lib/therapist/
 export type TherapistPublicProfileInput = {
   full_name: string;
   professional_title: string | null;
+  avatar_url: string | null;
   bio: string;
   gender: "male" | "female";
   languages: string[];
   specialization: string[];
   availability: string[];
   years_of_experience: number;
+  session_duration_minutes: number;
+  session_fee_try: number;
 };
 
 export async function therapistUpdatePublicProfileAction(
@@ -39,6 +43,8 @@ export async function therapistUpdatePublicProfileAction(
   }
 
   const yoe = Math.min(80, Math.max(0, Math.floor(Number(input.years_of_experience) || 0)));
+  const duration = Math.min(180, Math.max(15, Math.floor(Number(input.session_duration_minutes) || 50)));
+  const feeTry = Math.min(1000000, Math.max(0, Math.floor(Number(input.session_fee_try) || 0)));
 
   const languages = sanitizeTherapistLanguages(input.languages, 12);
   const specialization = sanitizeTherapistSpecialization(input.specialization, 12);
@@ -49,12 +55,15 @@ export async function therapistUpdatePublicProfileAction(
     .update({
       full_name: name,
       professional_title: input.professional_title?.trim() || null,
+      avatar_url: input.avatar_url?.trim() || null,
       bio: input.bio.trim(),
       gender: input.gender,
       languages,
       specialization,
       availability,
       years_of_experience: yoe,
+      session_duration_minutes: duration,
+      session_fee_try: feeTry,
     })
     .eq("profile_id", tp.profile_id);
 
@@ -66,6 +75,36 @@ export async function therapistUpdatePublicProfileAction(
   revalidatePath("/dashboard/therapists");
   revalidatePath(`/dashboard/therapists/${tp.profile_id}`);
   return { ok: true };
+}
+
+export async function therapistUploadAvatarAction(
+  formData: FormData,
+): Promise<{ ok: true; url: string } | { ok: false; message: string }> {
+  const { user } = await requireRole("therapist");
+  const supabase = await createSupabaseServerClient();
+  const tp = await fetchTherapistProfileByUserId(supabase, user.id);
+  if (!tp) return { ok: false, message: "Profil bağlantısı yok." };
+
+  const file = formData.get("file");
+  if (!(file instanceof File) || file.size === 0) return { ok: false, message: "Dosya seçilmedi." };
+  if (file.size > 5 * 1024 * 1024) return { ok: false, message: "Dosya 5 MB'dan küçük olmalı." };
+
+  const ext = file.name.split(".").pop()?.toLowerCase() || "jpg";
+  const safeExt = ["jpg", "jpeg", "png", "webp", "gif"].includes(ext) ? ext : "jpg";
+  const path = `${tp.profile_id}/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${safeExt}`;
+
+  const service = createSupabaseServiceClient();
+  const buffer = Buffer.from(await file.arrayBuffer());
+  const { data, error } = await service.storage.from("therapist-avatars").upload(path, buffer, {
+    contentType: file.type || `image/${safeExt === "jpg" ? "jpeg" : safeExt}`,
+    upsert: true,
+    cacheControl: "3600",
+  });
+  if (error) return { ok: false, message: error.message };
+
+  const objectPath = data?.path ?? path;
+  const { data: urlData } = service.storage.from("therapist-avatars").getPublicUrl(objectPath);
+  return { ok: true, url: urlData.publicUrl };
 }
 
 export async function therapistAddAvailabilityAction(input: {

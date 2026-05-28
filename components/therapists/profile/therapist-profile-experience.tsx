@@ -17,7 +17,6 @@ import { Suspense, useEffect, useMemo, useState } from "react";
 import { useI18n } from "@/components/i18n/i18n-provider";
 import type { TherapistAvailabilityRow, TherapistProfileRow } from "@/types/database";
 import { Button } from "@/components/ui/button";
-import { siteConfig } from "@/config/site";
 import { fadeUp, onboardingListContainer, onboardingListItem } from "@/lib/animations";
 import { formatIstanbulDate, formatIstanbulTime } from "@/lib/i18n/datetime";
 import { therapistRowToPreview } from "@/lib/onboarding/derive-therapist-preview";
@@ -33,7 +32,7 @@ function nextSlotsPreview(slots: TherapistAvailabilityRow[], limit: number): The
 
 function ProfileTag({ children }: { children: React.ReactNode }) {
   return (
-    <span className="inline-flex rounded-lg border border-[oklch(0.72_0.14_195/0.25)] bg-[oklch(0.55_0.14_195/0.12)] px-3 py-1.5 text-[0.78rem] font-medium text-[oklch(0.88_0.08_195)] transition-colors hover:bg-[oklch(0.55_0.14_195/0.18)]">
+    <span className="inline-flex rounded-lg border border-[#007AFF33] bg-[#007AFF14] px-3 py-1.5 text-[0.78rem] font-semibold text-[#0A4B97] transition-colors hover:bg-[#007AFF24]">
       {children}
     </span>
   );
@@ -54,6 +53,8 @@ function TherapistProfileExperienceInner({
   const preview = therapistRowToPreview(profile, gender);
   const rating = Number(profile.rating);
   const displayRating = Number.isFinite(rating) ? rating.toFixed(1) : "—";
+  const sessionMinutes = Math.max(15, Math.floor(profile.session_duration_minutes || 50));
+  const sessionFeeTry = Math.max(0, Math.floor(profile.session_fee_try || 0));
   const headlineSlots = useMemo(() => nextSlotsPreview(openSlots, 4), [openSlots]);
 
   useEffect(() => {
@@ -111,30 +112,40 @@ function TherapistProfileExperienceInner({
         <div className="relative flex flex-col gap-6 p-6 sm:flex-row sm:items-center sm:p-8">
           <div
             className={cn(
-              "mx-auto grid size-[7.5rem] shrink-0 place-items-center rounded-2xl font-display text-3xl text-white/95 shadow-lg sm:mx-0",
+              "mx-auto grid size-[7.5rem] shrink-0 place-items-center overflow-hidden rounded-2xl font-display text-3xl text-white/95 shadow-lg sm:mx-0",
               preview.accentClass,
             )}
           >
-            {preview.initials}
+            {profile.avatar_url ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={profile.avatar_url} alt={profile.full_name} className="h-full w-full object-cover" />
+            ) : (
+              preview.initials
+            )}
           </div>
           <div className="min-w-0 flex-1 space-y-3 text-center sm:text-left">
             <div className="flex flex-wrap items-center justify-center gap-2 sm:justify-start">
-              <span className="rounded-full border border-rose-400/25 bg-rose-500/[0.12] px-3 py-0.5 text-[0.72rem] font-medium text-rose-100/95">
+              <span className="rounded-full border border-[#007AFF30] bg-[#007AFF14] px-3 py-0.5 text-[0.72rem] font-semibold text-[#0A4B97]">
                 {profile.professional_title?.trim() || t("common.professionalSupport")}
               </span>
               {profile.verified ? (
-                <span className="inline-flex items-center gap-1 rounded-full border border-emerald-400/30 bg-emerald-500/15 px-2.5 py-0.5 text-[0.65rem] font-medium text-emerald-100/95">
+                <span className="inline-flex items-center gap-1 rounded-full border border-emerald-500/30 bg-emerald-500/12 px-2.5 py-0.5 text-[0.65rem] font-semibold text-emerald-700">
                   <BadgeCheck className="size-3.5" />
                   {t("therapists.profile.verified")}
                 </span>
               ) : null}
             </div>
             <p className="font-display text-[1.65rem] tracking-[-0.02em]">{profile.full_name}</p>
-            <div className="flex flex-wrap items-center justify-center gap-4 text-[0.88rem] sm:justify-start">
-              <span className="inline-flex items-center gap-1.5 text-muted-foreground">
+            <div className="flex flex-wrap items-center justify-center gap-3 text-[0.88rem] sm:justify-start">
+              <motion.span whileHover={{ scale: 1.04 }} className="inline-flex items-center gap-1.5 rounded-full border border-[#007AFF30] bg-[#007AFF14] px-3 py-1 font-semibold text-[#0A4B97]">
                 <Timer className="size-4 text-primary" />
-                {siteConfig.session.defaultDurationMinutes} {t("therapists.discovery.minutesShort")}
-              </span>
+                {sessionMinutes} {t("therapists.discovery.minutesShort")}
+              </motion.span>
+              <motion.span whileHover={{ scale: 1.04 }} className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/12 px-3 py-1 font-semibold text-emerald-700">
+                {sessionFeeTry > 0
+                  ? t("therapists.discovery.sessionFee", { fee: sessionFeeTry.toLocaleString("tr-TR") })
+                  : t("therapists.discovery.bookToSeePrice")}
+              </motion.span>
               <span className="inline-flex items-center gap-1 text-muted-foreground">
                 <Star className="size-4 text-amber-300/90" fill="currentColor" strokeWidth={0} />
                 <span className="tabular-nums text-foreground/90">{displayRating}</span>

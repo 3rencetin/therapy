@@ -1,12 +1,11 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Mic, Star, Video } from "lucide-react";
+import { Coins, Mic, Star, Timer, Video } from "lucide-react";
 import Link from "next/link";
 
 import { useI18n } from "@/components/i18n/i18n-provider";
 import { Button } from "@/components/ui/button";
-import { siteConfig } from "@/config/site";
 import { softSpring } from "@/lib/animations/easing";
 import { therapistRowToPreview } from "@/lib/onboarding/derive-therapist-preview";
 import type { TherapistProfileRow } from "@/types/database";
@@ -32,6 +31,8 @@ export function TherapistMarketplaceCard({
     preview.specialties.length > 0
       ? preview.specialties.slice(0, 5).join(", ")
       : preview.tone;
+  const sessionMinutes = Math.max(15, Math.floor(profile.session_duration_minutes || 50));
+  const sessionFeeTry = Math.max(0, Math.floor(profile.session_fee_try || 0));
 
   return (
     <motion.article
@@ -48,11 +49,16 @@ export function TherapistMarketplaceCard({
         <div className="mx-auto relative">
           <div
             className={cn(
-              "relative grid size-[5.5rem] place-items-center rounded-full font-display text-2xl tracking-tight text-white/95 ring-[3px] ring-[oklch(0.72_0.14_195/0.45)] transition-transform duration-500 group-hover:scale-[1.04]",
+              "relative grid size-[5.5rem] place-items-center overflow-hidden rounded-full font-display text-2xl tracking-tight text-white/95 ring-[3px] ring-[oklch(0.72_0.14_195/0.45)] transition-transform duration-500 group-hover:scale-[1.04]",
               preview.accentClass,
             )}
           >
-            {preview.initials}
+            {profile.avatar_url ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={profile.avatar_url} alt={profile.full_name} className="h-full w-full object-cover" />
+            ) : (
+              preview.initials
+            )}
           </div>
           {hasOpenSlot ? (
             <span
@@ -63,7 +69,7 @@ export function TherapistMarketplaceCard({
         </div>
 
         <div className="mt-4 space-y-2 text-center">
-          <span className="inline-flex rounded-full border border-rose-400/25 bg-rose-500/[0.12] px-3 py-0.5 text-[0.68rem] font-medium tracking-wide text-rose-100/95">
+          <span className="inline-flex rounded-full border border-[#007AFF30] bg-[#007AFF14] px-3 py-0.5 text-[0.68rem] font-semibold tracking-wide text-[#0B4EA2]">
             {profile.professional_title?.trim() || t("common.professionalSupport")}
           </span>
           <h3 className="font-display text-[1.35rem] tracking-[-0.02em] text-foreground">{profile.full_name}</h3>
@@ -98,11 +104,21 @@ export function TherapistMarketplaceCard({
       <div className="mx-6 h-[3px] rounded-full bg-gradient-to-r from-[oklch(0.72_0.14_195)] via-[oklch(0.62_0.16_210)] to-[oklch(0.58_0.16_285)] opacity-90" />
 
       <div className="relative flex flex-wrap items-center justify-between gap-3 px-5 py-4">
-        <div className="text-[0.82rem]">
-          <span className="font-medium text-foreground">{siteConfig.session.defaultDurationMinutes} {t("therapists.discovery.minutesShort")}</span>
-          <span className="mx-1.5 text-muted-foreground/40">·</span>
-          <span className="text-[0.75rem] text-muted-foreground">{t("therapists.discovery.bookToSeePrice")}</span>
-        </div>
+        <motion.div
+          whileHover={{ scale: 1.02 }}
+          className="flex flex-wrap items-center gap-2 text-[0.82rem]"
+        >
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-[#007AFF2E] bg-[linear-gradient(135deg,#007AFF1F,#5AC8FA26)] px-3 py-1 font-semibold text-[#0A4B97] shadow-[0_8px_20px_-12px_rgba(0,122,255,0.45)]">
+            <Timer className="size-3.5" />
+            {sessionMinutes} {t("therapists.discovery.minutesShort")}
+          </span>
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-[linear-gradient(135deg,rgba(52,199,89,0.14),rgba(16,185,129,0.2))] px-3 py-1 font-semibold text-emerald-700 shadow-[0_8px_20px_-12px_rgba(16,185,129,0.45)]">
+            <Coins className="size-3.5" />
+            {sessionFeeTry > 0
+              ? t("therapists.discovery.sessionFee", { fee: sessionFeeTry.toLocaleString("tr-TR") })
+              : t("therapists.discovery.bookToSeePrice")}
+          </span>
+        </motion.div>
         <div className="flex flex-wrap gap-2">
           <Button
             asChild
