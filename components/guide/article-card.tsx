@@ -5,6 +5,7 @@ import { ArrowRight } from "lucide-react";
 
 import { useI18n } from "@/components/i18n/i18n-provider";
 import { formatGuideDate } from "@/lib/articles/format-date";
+import { resolveGuideArticleForLocale } from "@/lib/articles/localized-content";
 import type { GuideArticleRow } from "@/lib/supabase/articles-repository";
 import { cn } from "@/lib/utils";
 
@@ -33,6 +34,7 @@ export function GuideArticleCard({
   variant?: "grid" | "compact" | "featured";
 }) {
   const { t, locale } = useI18n();
+  const content = resolveGuideArticleForLocale(article, locale);
   const href = `/dashboard/rehber/${article.slug}`;
   const date = formatGuideDate(article.published_at, locale);
 
@@ -53,10 +55,10 @@ export function GuideArticleCard({
             {date ? <span>{date}</span> : null}
           </div>
           <h3 className="mt-1 line-clamp-2 font-display text-[1rem] leading-snug tracking-[-0.02em] group-hover:text-[#007AFF]">
-            {article.title}
+            {content.title}
           </h3>
           <p className="mt-1 line-clamp-2 text-[0.78rem] leading-relaxed text-muted-foreground">
-            {article.excerpt}
+            {content.excerpt}
           </p>
         </div>
       </Link>
@@ -75,9 +77,9 @@ export function GuideArticleCard({
             {date ? <span>{date}</span> : null}
           </div>
           <h2 className="font-display text-[clamp(1.35rem,2.5vw,1.75rem)] leading-tight tracking-[-0.03em] group-hover:text-[#007AFF]">
-            {article.title}
+            {content.title}
           </h2>
-          <p className="line-clamp-3 text-[0.9rem] leading-relaxed text-muted-foreground">{article.excerpt}</p>
+          <p className="line-clamp-3 text-[0.9rem] leading-relaxed text-muted-foreground">{content.excerpt}</p>
           <span className="inline-flex items-center gap-1.5 text-[0.85rem] font-semibold text-[#007AFF]">
             {t("guide.readMore")}
             <ArrowRight className="size-4 transition group-hover:translate-x-0.5" />
@@ -99,10 +101,10 @@ export function GuideArticleCard({
           {date ? <span className="text-muted-foreground">{date}</span> : null}
         </div>
         <h3 className="mt-3 line-clamp-2 font-display text-[1.05rem] leading-snug tracking-[-0.02em] group-hover:text-[#007AFF]">
-          {article.title}
+          {content.title}
         </h3>
         <p className="mt-2 line-clamp-3 flex-1 text-[0.82rem] leading-relaxed text-muted-foreground">
-          {article.excerpt}
+          {content.excerpt}
         </p>
         <span className="mt-4 inline-flex h-10 items-center justify-center rounded-full bg-[#0d3b66] px-4 text-[0.8rem] font-semibold text-white transition group-hover:bg-[#007AFF]">
           {t("guide.readMore")}

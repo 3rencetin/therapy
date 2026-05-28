@@ -539,7 +539,8 @@ export const trMessages = {
       uploadingHint: "Kapak görseli sunucuya yükleniyor, lütfen bekleyin.",
       selectedFile: "Seçildi: {name}",
       fieldBody: "İçerik",
-      bodyHint: "Paragraflar için boş satır bırakın. Alt başlık: ## Başlık veya ### Alt başlık",
+      bodyHint:
+        "Her paragraf arasında boş satır bırakın. Alt başlık: ## Başlık · Madde: - madde metni · Kısa alt başlık: Satır sonuna iki nokta (:)",
       fieldFeatured: "Öne çıkan yazı",
       fieldStatus: "Durum",
       statusDraft: "Taslak",
@@ -562,6 +563,18 @@ export const trMessages = {
       errUploadFailed: "Kapak yüklenemedi. Sayfayı yenileyip tekrar deneyin.",
       errUploadNetwork: "Bağlantı hatası. İnternetinizi kontrol edin.",
       errCoverPreview: "Görsel önizlenemedi. Depo public değilse Supabase’de bucket’ı kontrol edin.",
+      translateEn: "İngilizceye çevir",
+      retranslateEn: "İngilizceyi yenile",
+      translating: "Çevriliyor…",
+      translateSuccess: "İngilizce çeviri kaydedildi. Ziyaretçiler EN seçince bu metni görür.",
+      translationEnReady: "İngilizce çeviri hazır",
+      translationEnMissing: "İngilizce çeviri yok — EN dilinde Türkçe metin gösterilir",
+      errTranslationNotConfigured:
+        "Çeviri şu an kullanılamıyor. Birkaç dakika sonra tekrar deneyin (ücretsiz kota dolmuş olabilir).",
+      errTranslationFailed:
+        "Çeviri başarısız. Metni kısaltıp tekrar deneyin veya bir süre bekleyin (günlük ücretsiz kota).",
+      translateFreeHint:
+        "Ücretsiz çeviri (MyMemory) — kart gerekmez. Günde çok makale çevirirseniz .env.local içine MYMEMORY_CONTACT_EMAIL=eposta@adresiniz ekleyin.",
     },
   },
   auth: {
@@ -820,6 +833,8 @@ export const trMessages = {
     emptyBody: "Kısa süre içinde yeni içerikler eklenecek.",
     breadcrumbHome: "Akış",
     breadcrumbGuide: "Bilgi köşesi",
+    translationPending:
+      "Bu yazının İngilizce çevirisi henüz yok. Türkçe metin gösteriliyor — yönetici panelinden «İngilizceye çevir» ile ekleyebilirsiniz.",
   },
   signOut: { label: "Çıkış", loading: "Çıkılıyor" },
   accountBanned: {

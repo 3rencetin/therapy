@@ -10,11 +10,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { GUIDE_CATEGORIES } from "@/lib/articles/categories";
+import { cn } from "@/lib/utils";
 import { mapGuideCoverUploadError } from "@/lib/articles/cover-upload";
 import { slugifyTitle } from "@/lib/articles/slug";
 import {
   deleteGuideArticleAction,
   saveGuideArticleAction,
+  translateGuideArticleAction,
   uploadArticleCoverAction,
   type ArticleFormInput,
 } from "@/lib/actions/admin-article-actions";
@@ -31,6 +33,8 @@ const ERR_MAP: Record<string, string> = {
   UPLOAD_BUCKET_MISSING: "admin.guide.errUploadBucket",
   UPLOAD_MIME: "admin.guide.errUploadMime",
   UPLOAD_FAILED: "admin.guide.errUploadFailed",
+  TRANSLATION_NOT_CONFIGURED: "admin.guide.errTranslationNotConfigured",
+  TRANSLATION_FAILED: "admin.guide.errTranslationFailed",
 };
 
 function formatUploadError(message: string, t: (key: string) => string): string {
@@ -50,6 +54,7 @@ export function ArticleEditorForm({ article }: { article?: GuideArticleRow | nul
   const blobUrlRef = useRef<string | null>(null);
   const [pending, startTransition] = useTransition();
   const [uploading, startUpload] = useTransition();
+  const [translating, startTranslate] = useTransition();
   const [error, setError] = useState<string | null>(null);
   const [uploadHint, setUploadHint] = useState<string | null>(null);
 
@@ -67,6 +72,7 @@ export function ArticleEditorForm({ article }: { article?: GuideArticleRow | nul
     (article?.status as "draft" | "published" | "archived") ?? "draft",
   );
   const [isFeatured, setIsFeatured] = useState(article?.is_featured ?? false);
+  const hasEnglish = Boolean(article?.translations?.en?.body?.trim());
 
   useEffect(() => {
     return () => {
@@ -152,6 +158,22 @@ export function ArticleEditorForm({ article }: { article?: GuideArticleRow | nul
         return;
       }
       router.push("/admin/rehber");
+      router.refresh();
+    });
+  }
+
+  function onTranslate() {
+    if (!article?.id) return;
+    setError(null);
+    setUploadHint(null);
+    startTranslate(async () => {
+      const res = await translateGuideArticleAction(article.id);
+      if (!res.ok) {
+        const key = ERR_MAP[res.message];
+        setError(key ? t(key) : res.message);
+        return;
+      }
+      setUploadHint(t("admin.guide.translateSuccess"));
       router.refresh();
     });
   }
@@ -323,9 +345,35 @@ export function ArticleEditorForm({ article }: { article?: GuideArticleRow | nul
           </div>
         </div>
 
+        {article?.id ? (
+          <p
+            className={cn(
+              "text-[0.8rem]",
+              hasEnglish ? "text-[#248A3D]" : "text-muted-foreground",
+            )}
+          >
+            {hasEnglish ? t("admin.guide.translationEnReady") : t("admin.guide.translationEnMissing")}
+          </p>
+        ) : null}
+
         {error ? <p className="text-[0.85rem] text-[#C41E12]">{error}</p> : null}
 
         <div className="flex flex-wrap gap-2 border-t border-border/50 pt-5">
+          {article?.id ? (
+            <Button
+              type="button"
+              variant="outline"
+              disabled={pending || isUploading || translating}
+              onClick={onTranslate}
+            >
+              {translating ? <Loader2 className="size-4 animate-spin" /> : null}
+              {translating
+                ? t("admin.guide.translating")
+                : hasEnglish
+                  ? t("admin.guide.retranslateEn")
+                  : t("admin.guide.translateEn")}
+            </Button>
+          ) : null}
           <Button type="button" disabled={pending || isUploading} onClick={() => submit("published")}>
             {pending ? <Loader2 className="size-4 animate-spin" /> : null}
             {t("admin.guide.publish")}

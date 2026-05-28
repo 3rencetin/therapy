@@ -533,7 +533,8 @@ export const enMessages: AppMessages = {
       uploadingHint: "Uploading cover image, please wait.",
       selectedFile: "Selected: {name}",
       fieldBody: "Body",
-      bodyHint: "Leave a blank line between paragraphs. Headings: ## Title or ### Subtitle",
+      bodyHint:
+        "Leave a blank line between paragraphs. Subheading: ## Title · Bullet: - item text · Short subheading: end line with a colon (:)",
       fieldFeatured: "Featured article",
       fieldStatus: "Status",
       statusDraft: "Draft",
@@ -556,6 +557,18 @@ export const enMessages: AppMessages = {
       errUploadFailed: "Could not upload cover. Refresh the page and try again.",
       errUploadNetwork: "Network error. Check your connection.",
       errCoverPreview: "Preview failed. Ensure the article-covers bucket is public in Supabase.",
+      translateEn: "Translate to English",
+      retranslateEn: "Refresh English",
+      translating: "Translating…",
+      translateSuccess: "English translation saved. Visitors who choose EN will see this text.",
+      translationEnReady: "English translation ready",
+      translationEnMissing: "No English translation — Turkish text is shown when EN is selected",
+      errTranslationNotConfigured:
+        "Translation is temporarily unavailable. Try again in a few minutes (free daily quota may be exhausted).",
+      errTranslationFailed:
+        "Translation failed. Shorten the text and retry, or wait for the free daily quota to reset.",
+      translateFreeHint:
+        "Free translation (MyMemory) — no card required. For many articles per day, add MYMEMORY_CONTACT_EMAIL=you@email.com to .env.local.",
     },
   },
   guide: {
@@ -570,6 +583,8 @@ export const enMessages: AppMessages = {
     emptyBody: "New content will appear here soon.",
     breadcrumbHome: "Home",
     breadcrumbGuide: "Knowledge hub",
+    translationPending:
+      "This article has no English translation yet. Showing Turkish — an admin can add one with “Translate to English” in the editor.",
   },
   auth: {
     loginTitle: "Sign in",

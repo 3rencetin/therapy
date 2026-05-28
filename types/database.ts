@@ -480,6 +480,7 @@ export type Database = {
           category: string;
           tags: string[];
           body: string;
+          translations: Record<string, unknown>;
           status: string;
           is_featured: boolean;
           published_at: string | null;
@@ -496,6 +497,7 @@ export type Database = {
           category?: string;
           tags?: string[];
           body?: string;
+          translations?: Record<string, unknown>;
           status?: string;
           is_featured?: boolean;
           published_at?: string | null;
@@ -512,6 +514,7 @@ export type Database = {
           category?: string;
           tags?: string[];
           body?: string;
+          translations?: Record<string, unknown>;
           status?: string;
           is_featured?: boolean;
           published_at?: string | null;

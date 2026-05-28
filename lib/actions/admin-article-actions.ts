@@ -8,7 +8,9 @@ import {
   resolveGuideCoverContentType,
 } from "@/lib/articles/cover-upload";
 import { slugifyTitle } from "@/lib/articles/slug";
+import type { GuideArticleTranslations } from "@/lib/articles/localized-content";
 import { requireRole } from "@/lib/auth/require-session";
+import { translateGuideFieldsToEnglish } from "@/lib/translation/translate-text";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { createSupabaseServiceClient } from "@/lib/supabase/service";
 
@@ -138,6 +140,52 @@ export async function uploadArticleCoverAction(
   const objectPath = data?.path ?? path;
   const { data: urlData } = supabase.storage.from("article-covers").getPublicUrl(objectPath);
   return { ok: true, url: urlData.publicUrl };
+}
+
+export async function translateGuideArticleAction(
+  id: string,
+): Promise<{ ok: true } | { ok: false; message: string }> {
+  await requireRole("admin");
+  if (!UUID_RE.test(id)) return { ok: false, message: "INVALID_ID" };
+
+  const supabase = await createSupabaseServerClient();
+  const { data, error } = await supabase
+    .from("guide_articles")
+    .select("id, title, excerpt, body, translations")
+    .eq("id", id)
+    .maybeSingle();
+
+  if (error) return { ok: false, message: error.message };
+  if (!data) return { ok: false, message: "NOT_FOUND" };
+
+  try {
+    const en = await translateGuideFieldsToEnglish({
+      title: data.title,
+      excerpt: data.excerpt ?? "",
+      body: data.body,
+    });
+
+    const prev = (data.translations ?? {}) as GuideArticleTranslations;
+    const translations: GuideArticleTranslations = { ...prev, en };
+
+    const { error: updateError } = await supabase
+      .from("guide_articles")
+      .update({ translations })
+      .eq("id", id);
+
+    if (updateError) return { ok: false, message: updateError.message };
+
+    revalidateGuide();
+    revalidatePath(`/admin/rehber/${id}`);
+    return { ok: true };
+  } catch (e) {
+    const msg = e instanceof Error ? e.message : "TRANSLATION_FAILED";
+    if (msg === "TRANSLATION_NOT_CONFIGURED") {
+      return { ok: false, message: "TRANSLATION_NOT_CONFIGURED" };
+    }
+    console.error("[translateGuideArticleAction]", msg);
+    return { ok: false, message: "TRANSLATION_FAILED" };
+  }
 }
 
 function revalidateGuide() {

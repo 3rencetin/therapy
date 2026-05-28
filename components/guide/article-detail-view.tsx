@@ -5,11 +5,13 @@ import { ChevronRight } from "lucide-react";
 
 import { useI18n } from "@/components/i18n/i18n-provider";
 import { ArticleBody } from "@/components/guide/article-body";
+import { resolveGuideArticleForLocale } from "@/lib/articles/localized-content";
 import { formatGuideDate } from "@/lib/articles/format-date";
 import type { GuideArticleRow } from "@/lib/supabase/articles-repository";
 
 export function ArticleDetailView({ article }: { article: GuideArticleRow }) {
   const { t, locale } = useI18n();
+  const content = resolveGuideArticleForLocale(article, locale);
   const date = formatGuideDate(article.published_at, locale);
 
   return (
@@ -23,8 +25,14 @@ export function ArticleDetailView({ article }: { article: GuideArticleRow }) {
           {t("guide.breadcrumbGuide")}
         </Link>
         <ChevronRight className="size-3.5 opacity-60" />
-        <span className="truncate text-foreground/80">{article.title}</span>
+        <span className="truncate text-foreground/80">{content.title}</span>
       </nav>
+
+      {content.usedFallback ? (
+        <p className="mb-4 rounded-xl border border-amber-500/20 bg-amber-500/[0.07] px-4 py-2.5 text-[0.82rem] text-muted-foreground">
+          {t("guide.translationPending")}
+        </p>
+      ) : null}
 
       <div className="relative">
         <header className="overflow-hidden rounded-t-[1.35rem] bg-[#0d3b66] px-6 pb-[4.5rem] pt-8 text-white sm:px-10 sm:pb-[5.5rem] sm:pt-10">
@@ -32,7 +40,7 @@ export function ArticleDetailView({ article }: { article: GuideArticleRow }) {
             {article.category}
           </p>
           <h1 className="mt-3 max-w-2xl font-display text-[clamp(1.55rem,4vw,2.2rem)] leading-[1.12] tracking-[-0.03em]">
-            {article.title}
+            {content.title}
           </h1>
         </header>
 
@@ -52,18 +60,23 @@ export function ArticleDetailView({ article }: { article: GuideArticleRow }) {
         )}
       </div>
 
-      <div className="space-y-4 px-1 sm:px-2">
-        {date ? <p className="text-[0.85rem] text-muted-foreground">{date}</p> : null}
-        {article.tags.length > 0 ? (
-          <p className="flex flex-wrap gap-2 text-[0.75rem] text-muted-foreground">
-            {article.tags.map((tag) => (
-              <span key={tag} className="rounded-full bg-muted px-2.5 py-0.5">
-                #{tag}
-              </span>
-            ))}
-          </p>
-        ) : null}
-        <ArticleBody body={article.body} />
+      <div className="space-y-6 px-1 sm:px-2">
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+          {date ? <p className="text-[0.85rem] text-muted-foreground">{date}</p> : null}
+          {article.tags.length > 0 ? (
+            <div className="flex flex-wrap gap-2">
+              {article.tags.map((tag) => (
+                <span
+                  key={tag}
+                  className="rounded-full border border-border/60 bg-muted/80 px-2.5 py-0.5 text-[0.72rem] font-medium text-muted-foreground"
+                >
+                  #{tag}
+                </span>
+              ))}
+            </div>
+          ) : null}
+        </div>
+        <ArticleBody body={content.body} />
       </div>
     </article>
   );

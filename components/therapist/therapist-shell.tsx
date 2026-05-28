@@ -9,6 +9,7 @@ import { motion } from "framer-motion";
 import type { TherapistProfileRow } from "@/types/database";
 import { siteConfig } from "@/config/site";
 import { SignOutButton } from "@/components/dashboard/sign-out-button";
+import { LanguageSwitcher } from "@/components/i18n/language-switcher";
 import { useI18n } from "@/components/i18n/i18n-provider";
 import { premiumEase } from "@/lib/animations/easing";
 import { isImmersiveVideoRoute } from "@/lib/navigation/is-immersive-video-route";
@@ -104,6 +105,7 @@ export function TherapistShell({
               </p>
             </div>
             <div className="flex min-w-0 flex-col items-stretch gap-2 sm:max-w-md sm:items-end">
+              <LanguageSwitcher className="self-start sm:self-end" />
               {!staffProfile ? (
                 <div className="flex items-start gap-2 rounded-xl border border-amber-500/18 bg-amber-500/[0.07] px-3 py-2 text-[0.78rem] text-amber-50/95">
                   <HeartHandshake className="mt-0.5 size-4 shrink-0" />
