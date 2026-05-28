@@ -66,6 +66,8 @@ export const enMessages: AppMessages = {
       sessions: "Sessions",
       journey: "Journey",
       guide: "Knowledge hub",
+      journal: "Journal",
+      notes: "Notes",
       trust: "Trust",
     },
     sessionsSection: {
@@ -269,6 +271,7 @@ export const enMessages: AppMessages = {
       notesFieldLabel: "Your notes",
       bodyPlaceholderClient: "A draft of what you want to share—saved page by page.",
       savePagesHint: "Save each page with «Save now»; add pages to grow your notebook.",
+      therapistCanView: "Allow therapist to view this page",
     },
   },
   therapists: {
@@ -796,6 +799,7 @@ export const enMessages: AppMessages = {
     prepHelp:
       "Draft what you’d like to share; it’s saved as the first page in your notebook. You can add pages later from the sessions screen.",
     prepPlaceholder: "E.g. topics I want to focus on today…",
+    therapistCanView: "Allow therapist to view this note",
     paymentNotice:
       "Payments are not enabled yet; this step only creates a gentle hold. You can cancel anytime if needed.",
     cancel: "Cancel",

@@ -40,6 +40,7 @@ export async function saveSessionNotebookPageAction(input: {
   pageId: string;
   title: string;
   body: string;
+  therapistCanView: boolean;
 }): Promise<NotebookActionResult> {
   const client = await createSupabaseServerClient();
   const { user, session } = await ensureClientSession(client, input.sessionId);
@@ -52,7 +53,7 @@ export async function saveSessionNotebookPageAction(input: {
 
   const { error } = await client
     .from("booked_session_notebook_pages")
-    .update({ title, body })
+    .update({ title, body, therapist_can_view: input.therapistCanView })
     .eq("id", input.pageId)
     .eq("session_id", input.sessionId);
 
@@ -87,6 +88,7 @@ export async function createSessionNotebookPageAction(
       sort_order: nextOrder,
       title: "",
       body: "",
+      therapist_can_view: true,
     })
     .select("id")
     .single();

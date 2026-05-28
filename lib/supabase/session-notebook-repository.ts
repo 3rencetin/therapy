@@ -3,7 +3,10 @@ import type { Database } from "@/types/database";
 
 type NotebookRow = Database["public"]["Tables"]["booked_session_notebook_pages"]["Row"];
 
-export type SessionNotebookPageDTO = Pick<NotebookRow, "id" | "sort_order" | "title" | "body" | "updated_at">;
+export type SessionNotebookPageDTO = Pick<
+  NotebookRow,
+  "id" | "sort_order" | "title" | "body" | "therapist_can_view" | "updated_at"
+>;
 
 export type ClientSessionNotebookContext = {
   id: string;
@@ -66,7 +69,7 @@ export async function fetchNotebookPagesForSession(
 ): Promise<SessionNotebookPageDTO[]> {
   const { data, error } = await client
     .from("booked_session_notebook_pages")
-    .select("id, sort_order, title, body, updated_at")
+    .select("id, sort_order, title, body, therapist_can_view, updated_at")
     .eq("session_id", sessionId)
     .order("sort_order", { ascending: true });
 

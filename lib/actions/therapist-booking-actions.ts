@@ -12,7 +12,7 @@ export type BookSessionResult =
 
 export async function bookTherapistSessionAction(
   availabilityId: string,
-  opts?: { initialNotebookTitle?: string; initialNotebookBody?: string },
+  opts?: { initialNotebookTitle?: string; initialNotebookBody?: string; therapistCanView?: boolean },
 ): Promise<BookSessionResult> {
   const supabase = await createSupabaseServerClient();
   const {
@@ -61,6 +61,7 @@ export async function bookTherapistSessionAction(
       sort_order: 0,
       title: clampNotebookTitle(nbTitle || "Seans öncesi"),
       body: clampNotebookBody(nbBody),
+      therapist_can_view: opts?.therapistCanView ?? true,
     });
   }
 

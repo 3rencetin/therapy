@@ -52,6 +52,7 @@ export function BookingFlowSheet({
   const [busy, setBusy] = useState(false);
   const [serverMessage, setServerMessage] = useState<string | null>(null);
   const [prepNote, setPrepNote] = useState("");
+  const [therapistCanView, setTherapistCanView] = useState(true);
   const [bookedSessionId, setBookedSessionId] = useState<string | null>(null);
 
   useEffect(() => {
@@ -62,6 +63,7 @@ export function BookingFlowSheet({
         setBusy(false);
         setServerMessage(null);
         setPrepNote("");
+        setTherapistCanView(true);
         setBookedSessionId(null);
       }, 220);
       return () => window.clearTimeout(clearTimer);
@@ -77,6 +79,7 @@ export function BookingFlowSheet({
     setServerMessage(null);
     const res: BookSessionResult = await bookTherapistSessionAction(selected.id, {
       initialNotebookBody: prepNote.trim() || undefined,
+      therapistCanView,
     });
     setBusy(false);
     if (res.ok) {
@@ -250,6 +253,15 @@ export function BookingFlowSheet({
                         "mt-3 min-h-[100px] w-full resize-y rounded-xl border border-border/70 bg-input px-3 py-2.5 text-[0.88rem] text-foreground placeholder:text-muted-foreground/75 focus-visible:border-border focus-visible:ring-2 focus-visible:ring-ring/55",
                       )}
                     />
+                    <label className="mt-3 flex items-center gap-2 text-[0.78rem] text-muted-foreground">
+                      <input
+                        type="checkbox"
+                        checked={therapistCanView}
+                        onChange={(e) => setTherapistCanView(e.target.checked)}
+                        className="size-4"
+                      />
+                      {t("sessionBooking.therapistCanView")}
+                    </label>
                   </div>
 
                   <div className="rounded-xl border border-amber-500/15 bg-amber-500/[0.06] px-4 py-3 text-[0.8rem] leading-relaxed text-amber-100/90">

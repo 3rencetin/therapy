@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
 
 import { SessionNotebookEditor } from "@/components/sessions/session-notebook-editor";
+import { SessionReflectionCard } from "@/components/sessions/session-reflection-card";
 import {
   fetchClientSessionForNotebook,
   fetchNotebookPagesForSession,
@@ -30,6 +31,23 @@ export default async function SessionNotebookPage({ params }: { params: Promise<
   }
 
   const pages = await fetchNotebookPagesForSession(supabase, sessionId);
+  const { data: reflection } = await supabase
+    .from("session_reflections")
+    .select("mood, note")
+    .eq("session_id", sessionId)
+    .eq("user_id", user.id)
+    .maybeSingle();
+  const reflectionEnabled = context.status === "completed" || new Date(context.ends_at).getTime() <= Date.now();
 
-  return <SessionNotebookEditor sessionId={sessionId} context={context} initialPages={pages} />;
+  return (
+    <div className="mx-auto max-w-5xl space-y-6 pb-24">
+      <SessionNotebookEditor sessionId={sessionId} context={context} initialPages={pages} />
+      <SessionReflectionCard
+        sessionId={sessionId}
+        initialMood={reflection?.mood ?? null}
+        initialNote={reflection?.note ?? ""}
+        enabled={reflectionEnabled}
+      />
+    </div>
+  );
 }

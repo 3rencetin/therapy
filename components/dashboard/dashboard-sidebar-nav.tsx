@@ -55,6 +55,18 @@ export function DashboardSidebarNav({
       isActive: (p) => p.startsWith("/dashboard/rehber"),
     },
     {
+      href: "/dashboard/gunluk",
+      labelKey: "dashboard.nav.journal",
+      icon: <Calendar className="size-[1.1rem] stroke-[1.5]" />,
+      isActive: (p) => p.startsWith("/dashboard/gunluk"),
+    },
+    {
+      href: "/dashboard/notlar",
+      labelKey: "dashboard.nav.notes",
+      icon: <BookOpen className="size-[1.1rem] stroke-[1.5]" />,
+      isActive: (p) => p.startsWith("/dashboard/notlar"),
+    },
+    {
       href: "/dashboard/journey",
       labelKey: "dashboard.nav.journey",
       icon: <Sparkles className="size-[1.1rem] stroke-[1.5]" />,

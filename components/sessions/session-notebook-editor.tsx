@@ -30,6 +30,7 @@ export function SessionNotebookEditor({
   const [activeId, setActiveId] = useState<string | null>(() => initialPages[0]?.id ?? null);
   const [draftTitle, setDraftTitle] = useState("");
   const [draftBody, setDraftBody] = useState("");
+  const [draftTherapistCanView, setDraftTherapistCanView] = useState(true);
   const [feedback, setFeedback] = useState<{ variant: "ok" | "err"; text: string } | null>(null);
   const [pending, start] = useTransition();
 
@@ -40,10 +41,12 @@ export function SessionNotebookEditor({
     if (!active) {
       setDraftTitle("");
       setDraftBody("");
+      setDraftTherapistCanView(true);
       return;
     }
     setDraftTitle(active.title);
     setDraftBody(active.body);
+    setDraftTherapistCanView(active.therapist_can_view);
   }, [active?.id, active?.title, active?.body, active]);
 
   function saveCurrent() {
@@ -55,6 +58,7 @@ export function SessionNotebookEditor({
         pageId: active.id,
         title: draftTitle,
         body: draftBody,
+        therapistCanView: draftTherapistCanView,
       });
       if (!res.ok) {
         setFeedback({ variant: "err", text: res.message });
@@ -63,7 +67,13 @@ export function SessionNotebookEditor({
       setPages((prev) =>
         prev.map((p) =>
           p.id === active.id
-            ? { ...p, title: draftTitle.trim(), body: draftBody, updated_at: new Date().toISOString() }
+            ? {
+                ...p,
+                title: draftTitle.trim(),
+                body: draftBody,
+                therapist_can_view: draftTherapistCanView,
+                updated_at: new Date().toISOString(),
+              }
             : p,
         ),
       );
@@ -86,6 +96,7 @@ export function SessionNotebookEditor({
         sort_order: nextSort,
         title: "",
         body: "",
+        therapist_can_view: true,
         updated_at: new Date().toISOString(),
       };
       setPages((p) => [...p, row]);
@@ -265,6 +276,17 @@ export function SessionNotebookEditor({
                 <p className="text-[0.72rem] text-muted-foreground">
                   {t("sessions.notebook.savePagesHint")}
                 </p>
+                {!readOnly ? (
+                  <label className="mt-2 flex items-center gap-2 text-[0.78rem] text-muted-foreground">
+                    <input
+                      type="checkbox"
+                      checked={draftTherapistCanView}
+                      onChange={(e) => setDraftTherapistCanView(e.target.checked)}
+                      className="size-4"
+                    />
+                    {t("sessions.notebook.therapistCanView")}
+                  </label>
+                ) : null}
               </div>
             </>
           )}

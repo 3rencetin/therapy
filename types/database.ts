@@ -156,6 +156,7 @@ export type Database = {
           sort_order: number;
           title: string;
           body: string;
+          therapist_can_view: boolean;
           created_at: string;
           updated_at: string;
         };
@@ -165,6 +166,7 @@ export type Database = {
           sort_order: number;
           title?: string;
           body?: string;
+          therapist_can_view?: boolean;
           created_at?: string;
           updated_at?: string;
         };
@@ -174,6 +176,7 @@ export type Database = {
           sort_order?: number;
           title?: string;
           body?: string;
+          therapist_can_view?: boolean;
           created_at?: string;
           updated_at?: string;
         };
@@ -183,6 +186,127 @@ export type Database = {
             columns: ["session_id"];
             isOneToOne: false;
             referencedRelation: "booked_sessions";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      session_reflections: {
+        Row: {
+          id: string;
+          session_id: string;
+          user_id: string;
+          mood: number;
+          note: string;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          session_id: string;
+          user_id: string;
+          mood: number;
+          note?: string;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          session_id?: string;
+          user_id?: string;
+          mood?: number;
+          note?: string;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "session_reflections_session_id_fkey";
+            columns: ["session_id"];
+            isOneToOne: false;
+            referencedRelation: "booked_sessions";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "session_reflections_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      user_journal_entries: {
+        Row: {
+          id: string;
+          user_id: string;
+          entry_date: string;
+          title: string;
+          body: string;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          user_id: string;
+          entry_date: string;
+          title?: string;
+          body?: string;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          user_id?: string;
+          entry_date?: string;
+          title?: string;
+          body?: string;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "user_journal_entries_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      user_notes: {
+        Row: {
+          id: string;
+          user_id: string;
+          note_date: string;
+          title: string;
+          body: string;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          user_id: string;
+          note_date?: string;
+          title?: string;
+          body?: string;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          user_id?: string;
+          note_date?: string;
+          title?: string;
+          body?: string;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "user_notes_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
             referencedColumns: ["id"];
           },
         ];

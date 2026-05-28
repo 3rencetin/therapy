@@ -10,6 +10,7 @@ export type TherapistPrepPage = {
   sort_order: number;
   title: string;
   body: string;
+  therapist_can_view?: boolean;
   updated_at: string;
 };
 
@@ -54,6 +55,7 @@ function normalizePrepPages(raw: BookedSessionWithClientJoin["prep_pages"]): The
       sort_order: typeof r.sort_order === "number" ? r.sort_order : Number(r.sort_order),
       title: typeof r.title === "string" ? r.title : "",
       body: typeof r.body === "string" ? r.body : "",
+      therapist_can_view: typeof r.therapist_can_view === "boolean" ? r.therapist_can_view : undefined,
       updated_at: typeof r.updated_at === "string" ? r.updated_at : "",
     });
   }
@@ -97,7 +99,7 @@ export async function fetchBookingsForTherapistProfile(
       notes,
       video_call_extended_until,
       client:profiles!booked_sessions_user_id_profiles_fkey(full_name, email),
-      prep_pages:booked_session_notebook_pages(sort_order,title,body,updated_at)
+      prep_pages:booked_session_notebook_pages(sort_order,title,body,therapist_can_view,updated_at)
     `,
     )
     .eq("profile_id", profileId)

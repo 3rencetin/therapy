@@ -64,6 +64,8 @@ export const trMessages = {
       sessions: "Seanslar",
       journey: "Yolculuk",
       guide: "Bilgi köşesi",
+      journal: "Günlük",
+      notes: "Notlar",
       trust: "Güven",
     },
     sessionsSection: {
@@ -274,6 +276,7 @@ export const trMessages = {
         "Görüşmede paylaşmak istediklerinin taslağı—sayfa sayfa kaydedilir.",
       savePagesHint:
         "Her sayfayı «Şimdi kaydet» ile sakla; yeni sayfa ekleyerek defteri büyütebilirsin.",
+      therapistCanView: "Bu sayfayı terapistim görebilsin",
     },
   },
   therapists: {
@@ -790,6 +793,7 @@ export const trMessages = {
     prepHelp:
       "Görüşmede paylaşmak istediklerinin taslağını buraya yaz; not defterinde ilk sayfan olarak kaydedilir. Daha sonra seanslar ekranından sayfa ekleyebilirsin.",
     prepPlaceholder: "Örn. bugün üzerinde durmak istediğim konular…",
+    therapistCanView: "Bu notu terapistim görebilsin",
     paymentNotice:
       "Ödeme henüz devreye alınmadı; bu adımda yalnızca nazik bir rezervasyon oluşturuyoruz. Lütfen güvenle ilerle—gerekirse istediğin an iptal edebilirsin.",
     cancel: "İptal",
